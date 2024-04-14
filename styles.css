@@ -1,0 +1,437 @@
+/* All images and videos were taken by Justin Curtsinger */
+.back {
+    background-color: #77A02A;
+    border-radius: 20px 3px 3px 20px;
+    filter: drop-shadow(0 0 1px #151515b7);
+    top: 88%;
+    right: 5.2rem;
+    color: whitesmoke;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    position: fixed;
+    padding: 0 1rem 0 1.2rem;
+    text-align: center;
+    text-decoration: none;
+    z-index: 1;
+}
+
+.back:active {
+    filter: none;
+    font-weight: bold;
+    color: white;
+}
+
+.back:hover {
+    background-color: #8dbe32;
+}
+
+body {
+    background-color: #116262;
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+}
+
+.bottomSection {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+.bottomSection h2 {
+    display: none;
+}
+
+.bottomText {
+    display: flex;
+    height: auto;
+    justify-content: center;
+    position: relative;
+    text-align: left;
+    margin: 22rem auto 0 auto;
+    width: 100%;
+}
+.bottomText h2 {
+    display: none;
+}
+
+.bottomText p:active {
+    background-color: #151515;
+    color: white;
+}
+
+caption {
+    border: 2px solid rgb(200, 200, 200);
+    border-bottom: none;
+    padding: .25rem;
+}
+
+caption:last-of-type {
+    border: none;
+    caption-side: bottom;
+    transform: translateY(.5rem);
+}
+
+.commentForm {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+    margin: 2rem auto 10rem auto;
+    max-width: 600px;
+    width: 100vw;
+}
+.commentForm h2 {
+    display: none;
+}
+
+/* figure out how to position this correctly */
+#externalLinks {
+    margin-top: 25rem;
+    margin-bottom: -10rem;
+    overflow: visible;
+    position: relative;
+    transform: translateX(-25%);
+}
+#externalLinks a {
+    color: white;
+}
+#externalLinks h2 {
+    display: none;
+}
+#externalLinks p {
+    text-align: center;
+}
+
+fieldset {
+    border: none;
+}
+
+footer {
+    align-items: center;
+    background-color: #1A3F6B;
+    border-radius: 5px;
+    bottom: 4px;
+    color: whitesmoke;
+    display: flex;
+    font-size: 1rem;
+    height: 4rem;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center;
+    width: 100%;
+}
+
+footer a {
+    color: whitesmoke;
+    text-decoration: none;
+}
+
+footer a:active {
+    color: #dc7826;
+}
+
+footer a:hover {
+    font-weight: 600;
+}
+
+footer a:last-of-type {
+    margin: 0 auto;
+}
+
+footer p {
+    padding: 0 7.5rem .5rem 2rem;
+}
+
+form {
+    background-color: #1a3f6b;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(50, 50, 50, 0.4);
+    padding: .5rem;
+}
+
+input {
+    margin: 0 auto 1rem auto;
+    padding: .3rem;
+    width: 40vw;
+}
+
+h1 {
+    /* background-color: #1A3F6B; */
+    /* box-shadow: 0px 1px 1px #1515152e; */
+    border-bottom: 2px inset rgba(245, 245, 245, 0.717);
+    border-radius: 2px;
+    font-size: 22pt;
+    text-align: center;
+    text-shadow: 0 0 1px #15151577;
+    margin: 1.25rem auto;
+    padding: .5rem 0 0 .25rem;
+    width: fit-content;
+}
+
+header  {
+    font-size: 10pt;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+img {
+    border-radius: 10px;
+    box-shadow: 0px 1px 1px #15151531;
+    margin: 0 3.8rem 0 4rem;
+    width: 39%;
+}
+
+img:active {
+    position: relative;
+    margin: 0 auto;
+    width: 52%;  /* I like the way this functions over using transform:scale() to make the img's bigger */
+}
+
+.image1 {
+    float: left;
+}
+
+.image2 {
+    float: right;
+}
+
+.image3 {
+    float: left;
+}
+
+input[type=submit] {
+    background-color: whitesmoke;
+    border: 2px groove #dc7826;
+    border-radius: 5px;
+    color: #116262;
+    filter: drop-shadow(0 1px 2px rgba(42, 40, 40, 0.734));
+    font-weight: bold;
+    margin: 2rem auto 1rem auto;
+    max-width: 180px;
+    width: 20vw;
+}
+
+input[type=submit]:active {
+    background-color: rgb(228, 220, 220);
+    filter: none;
+}
+
+form label {
+    display: block;
+    margin: .5rem auto -.9rem auto;
+}
+
+legend {
+    padding: .25rem;
+}
+legend a {
+    color: white;
+    font-weight: bold;
+}
+
+main {
+    margin: 3vh 0;
+}
+
+main p {
+    align-items: center;
+    background-color: #1a3f6bba;
+    border-radius: 10px;
+    box-shadow: 0px 1px 1px #15151543;
+    display: flex;
+    float: right;
+    font-size: 16pt;
+    justify-content: center;
+    letter-spacing: .06rem;
+    line-height: 1.6rem;
+    margin: -20rem 0 3rem 0;
+    padding: 1rem;
+    text-align: left;
+    width: 45%;
+}
+
+main p:active, #main1 p:active {
+    background-color: #151515;
+    color: white;
+    font-size: 17pt;
+    line-height: 1.7rem;
+}
+
+#main1 {
+    align-items: flex-start;
+    background-image: url(images/mainPic.jpg);
+    background-size: 90vw;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    display: flex;
+    height: 100VH;
+    justify-content: center;
+    padding-top: 2rem;
+}
+#main1 h2 {
+    display: none;
+}
+#main1 p {
+    background-color: #1a3f6b;
+    border-radius: 5px;
+    display: flex;
+    line-height: 1.6rem;
+    margin: 0 2rem;
+    max-width: 600px;
+    text-align: left;
+    padding: .9rem;
+    width: auto;
+}
+#main1 p:first-of-type {
+    float: left;
+    padding-right: 0;
+}
+#main1 p:last-of-type {
+    float: right;
+    margin-left: -1rem;
+    margin-top: .9rem;
+}
+
+nav {
+    background-color: #A35A1D;
+    border-radius: 5px;
+    color: whitesmoke;
+    filter: drop-shadow(0px 1px 1px #15151552);
+    font-size: 12pt;
+    padding: 1.4rem;
+    text-align: center;
+}
+
+nav a {
+    color: whitesmoke;
+    text-shadow: 0 0 1px #151515;
+    padding: .2rem .25rem;
+    text-decoration: none;
+}
+
+nav a:hover {
+    border-top: 1px double #1a3f6b;
+    border-bottom: 1px double #1a3f6b;
+    border-radius: 2px;
+    padding: .1rem .25rem;
+}
+
+nav a:active {
+    color: rgb(192, 183, 183);
+    padding: .08rem .25rem;
+    text-shadow: none;
+}
+
+.next {
+    background: #77A02A;
+    border-radius: 3px 20px 20px 3px;
+    filter: drop-shadow(0 0 1px #151515b7);
+    top: 88%;
+    right: .5rem;
+    color: whitesmoke;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    margin: 0 auto;
+    position: fixed;
+    padding: 0 1.2rem 0 1rem;
+    text-align: center;
+    text-decoration: none;
+    z-index: 1;
+}
+
+.next:active {
+    filter: none;
+    font-weight: bold;
+    color: white;
+}
+
+.next:hover {
+    background-color: #8dbe32;
+}
+
+#organPipeTopSection p, #pricklyTopSection p {
+    margin-top: 1rem;
+}
+
+#poppyText {
+    margin-top: 1rem;
+}
+
+#saguaroForm {
+    display: block;
+    max-width: 650px;
+}
+
+#saguaroTable {
+    background-color: #1A3F6B;
+    border-radius: 15px;
+    margin: 0 auto;
+    min-width: 460px;
+    padding: 1rem;
+    width: 60vw;
+}
+#saguaroTable h2 {
+    display: none;
+}
+
+table {
+    border: 2px solid rgb(200, 200, 200);
+    border-collapse: collapse;
+    height: auto;
+    margin: 0 auto;
+    min-width: 460px;
+    text-align: center;
+    width: 60vw;
+}
+
+td {
+    border: 2px solid rgb(200, 200, 200);
+    padding: .25rem;
+}
+
+td:first-of-type {
+    padding-left: .75rem;
+    text-align: left;
+}
+
+textarea {
+    width: 40vw;
+    margin: 0 auto;
+    padding: 1.5rem .5rem;
+}
+
+th {
+    border: 2px solid rgb(200, 200, 200);
+    padding: .25rem;
+}
+
+tr:nth-of-type(even) {
+    background-color: #A35A1D;
+}
+
+.topSection {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+.topSection h2 {
+    display: none;
+}
+
+#video {
+    margin-top: -1.9rem;
+    text-align: center;
+}
+#video:active {
+    margin-top: 10rem;
+}
+#video h2 {
+    display: none;
+}
