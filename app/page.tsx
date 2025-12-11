@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { plants, PlantCategory } from "@/lib/plants";
@@ -9,6 +9,7 @@ import PlantCard from "./(components)/PlantCard";
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<PlantCategory | "all">("all");
+  const gridRef = useRef<HTMLDivElement | null>(null);
 
   const filteredPlants = useMemo(() => {
     let filtered = plants;
@@ -32,8 +33,7 @@ export default function Home() {
   }, [searchQuery, selectedCategory]);
 
   const scrollToPlants = () => {
-    const element = document.getElementById("plant-grid");
-    element?.scrollIntoView({ behavior: "smooth" });
+    gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const categories: { label: string; value: PlantCategory | "all" }[] = [
@@ -45,17 +45,17 @@ export default function Home() {
   ];
 
   return (
-    <main className="min-h-screen">
+    <main>
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         {/* Section 1: Hero */}
-        <section className="py-16 md:py-24">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <section className="py-12 md:py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Left Column */}
             <div>
               <p className="text-sm font-medium text-text-secondary mb-4 uppercase tracking-wide">
                 Field Guide
               </p>
-              <h1 className="text-5xl md:text-6xl font-bold text-text-primary mb-6 leading-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-text-primary mb-6 leading-tight">
                 Plants of the Sonoran Desert
               </h1>
               <p className="text-lg text-text-secondary mb-8 leading-relaxed">
@@ -71,7 +71,7 @@ export default function Home() {
               </button>
             </div>
             {/* Right Column */}
-            <div className="relative w-full h-[400px] md:h-[500px] rounded-lg overflow-hidden">
+            <div className="relative w-full h-[350px] md:h-[450px] rounded-lg overflow-hidden">
               <Image
                 src="/images/hero-desert.jpg"
                 alt="Sonoran Desert landscape"
@@ -85,7 +85,7 @@ export default function Home() {
         </section>
 
         {/* Section 2: Search + Categories */}
-        <section className="py-12" id="plant-grid">
+        <section className="mt-8 md:mt-10">
           <div className="mb-8">
             <div className="max-w-2xl mx-auto flex gap-2">
               <input
@@ -123,7 +123,7 @@ export default function Home() {
         </section>
 
         {/* Section 3: Plant Grid */}
-        <section className="py-12 pb-24">
+        <section className="py-12 pb-24" ref={gridRef}>
           {filteredPlants.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredPlants.map((plant) => (
