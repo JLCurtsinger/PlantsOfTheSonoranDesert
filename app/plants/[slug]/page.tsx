@@ -16,6 +16,20 @@ export default async function PlantPage({ params }: PlantPageProps) {
     notFound();
   }
 
+  const allImages: string[] = [
+    plant.mainImage,
+    ...(plant.galleryImages ?? []),
+  ].filter(Boolean) as string[];
+
+  const galleryDetails =
+    plant.galleryDetails ??
+    (plant.galleryImages ?? []).map((src, index) => ({
+      src,
+      alt: `${plant.commonName} photo ${index + 1}`,
+      title: undefined,
+      description: undefined,
+    }));
+
   return (
     <main className="max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-12">
       <Link
@@ -72,23 +86,41 @@ export default async function PlantPage({ params }: PlantPageProps) {
         </p>
       </section>
 
-      {/* Simple gallery using any galleryImages we have */}
-      {plant.galleryImages && plant.galleryImages.length > 0 && (
+      {/* Photo gallery with cards */}
+      {galleryDetails.length > 0 && (
         <section className="mt-10 md:mt-12">
           <h2 className="text-xl md:text-2xl font-semibold text-text-primary mb-4">
             Photo gallery
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {plant.galleryImages.map((src, index) => (
-              <ImageWithModal
-                key={src}
-                src={src}
-                alt={plant.commonName}
-                wrapperClassName="relative w-full h-48 rounded-lg bg-subtle"
-                allImages={[plant.mainImage, ...(plant.galleryImages ?? [])]}
-                // +1 because index 0 is the main image in allImages
-                startIndex={index + 1}
-              />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {galleryDetails.map((item, index) => (
+              <article
+                key={item.src}
+                className="flex flex-col rounded-lg bg-card border border-border-subtle shadow-sm overflow-hidden"
+              >
+                <div className="relative w-full h-48 sm:h-56 md:h-64">
+                  <ImageWithModal
+                    src={item.src}
+                    alt={item.alt || `${plant.commonName} photo ${index + 1}`}
+                    wrapperClassName="relative w-full h-full overflow-hidden"
+                    allImages={allImages}
+                    startIndex={index}
+                  />
+                </div>
+
+                <div className="px-3 py-3 flex flex-col gap-1">
+                  {item.title && (
+                    <h3 className="text-sm font-semibold text-text-primary">
+                      {item.title}
+                    </h3>
+                  )}
+                  {item.description && (
+                    <p className="text-xs text-text-secondary leading-snug">
+                      {item.description}
+                    </p>
+                  )}
+                </div>
+              </article>
             ))}
           </div>
         </section>

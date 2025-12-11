@@ -9,6 +9,12 @@ export interface Plant {
   quickFacts: { label: string; value: string }[];
   mainImage: string;
   galleryImages?: string[];
+  galleryDetails?: {
+    src: string;
+    alt: string;
+    title?: string;
+    description?: string;
+  }[];
   detailSections?: { src: string; alt: string; title: string; description: string }[];
 }
 
@@ -32,6 +38,50 @@ export const plants: Plant[] = [
       "/images/saguaro/saguaroBloom.webp",
       "/images/saguaro/saguaroCloseUp.webp",
       "/images/saguaro/saguaroHoles.webp",
+    ],
+    galleryDetails: [
+      {
+        src: "/images/saguaro/youngSaguaro.webp",
+        alt: "Young saguaro cactus in front of the Tucson mountains",
+        title: "Young saguaro in the foothills",
+        description:
+          "A young saguaro growing among desert shrubs with the Tucson mountains in the distance. Notice the smooth, unbranched column shape.",
+      },
+      {
+        src: "/images/saguaro/adultSaguaro.webp",
+        alt: "Mature saguaro cactus in the Sonoran Desert",
+        title: "Mature saguaro",
+        description:
+          "An adult saguaro with arms beginning to form. Saguaros typically start to branch when they are 50–75 years old.",
+      },
+      {
+        src: "/images/saguaro/babySaguaro.webp",
+        alt: "Small saguaro cactus growing under a nurse plant",
+        title: "Seedling under a nurse plant",
+        description:
+          "A small saguaro growing in the partial shade of another plant, which helps protect it from extreme sun and temperature swings.",
+      },
+      {
+        src: "/images/saguaro/saguaroBloom.webp",
+        alt: "Close-up of a blooming saguaro flower",
+        title: "Saguaro flower",
+        description:
+          "The saguaro's white, waxy flowers bloom at the top of the stems in late spring. They provide nectar for bats, birds, and insects.",
+      },
+      {
+        src: "/images/saguaro/saguaroCloseUp.webp",
+        alt: "Close-up of saguaro ribs and spines",
+        title: "Ribs and spines detail",
+        description:
+          "A close look at the accordion-like ribs and sharp spines that help the saguaro store water and discourage animals from eating it.",
+      },
+      {
+        src: "/images/saguaro/saguaroHoles.webp",
+        alt: "Saguaro cactus with woodpecker nest holes",
+        title: "Bird nesting cavities",
+        description:
+          "Woodpeckers and other birds carve nesting holes into saguaros. Over time, these heal into hardened structures called saguaro boots.",
+      },
     ],
     detailSections: [
       {
