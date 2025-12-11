@@ -96,7 +96,7 @@ export default function ImageWithModal({
       {/* Modal */}
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
           onClick={() => {
             setOpen(false);
             setZoomed(false);
@@ -104,30 +104,27 @@ export default function ImageWithModal({
         >
           {/* This is the central box and the positioning context for arrows */}
           <div
-            className="relative w-full max-w-[80vw] max-h-[80vh]"
+            className="relative inline-flex max-w-[90vw] max-h-[90vh] items-center justify-center"
             onClick={(event) => {
               event.stopPropagation();
             }}
           >
             {/* Image container – give it an explicit height so Next.js Image with `fill` can render */}
             <div
-              className="relative w-full h-[70vh] max-h-[80vh] overflow-auto rounded-lg bg-black cursor-zoom-in"
+              className="relative max-w-[90vw] max-h-[90vh] overflow-auto rounded-lg shadow-xl cursor-zoom-in"
               onClick={() => setZoomed((z) => !z)}
             >
-              <div
-                className={`relative w-full h-full flex items-center justify-center transition-transform duration-200 ${
-                  zoomed ? "scale-[1.5] cursor-zoom-out" : "scale-100"
-                }`}
-              >
-                <div className="relative w-full h-full">
-                  <Image
-                    src={activeSrc}
-                    alt={alt}
-                    fill
-                    className="object-contain"
-                    sizes="80vw"
-                  />
-                </div>
+              <div className="relative flex items-center justify-center">
+                <Image
+                  src={activeSrc}
+                  alt={alt}
+                  width={2000}
+                  height={2000}
+                  className={`max-h-[85vh] max-w-[90vw] w-auto h-auto object-contain transition-transform duration-200 ${
+                    zoomed ? "scale-150 cursor-zoom-out" : "scale-100 cursor-zoom-in"
+                  }`}
+                  sizes="90vw"
+                />
               </div>
             </div>
 
@@ -139,7 +136,7 @@ export default function ImageWithModal({
                   event.stopPropagation();
                   goPrev();
                 }}
-                className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 hover:bg-black/60 text-white px-3 py-2 text-2xl leading-none focus:outline-none"
+                className="absolute left-[-3rem] top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 hover:bg-black/80 text-white text-2xl leading-none focus:outline-none"
               >
                 ‹
               </button>
@@ -152,7 +149,7 @@ export default function ImageWithModal({
                   event.stopPropagation();
                   goNext();
                 }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 hover:bg-black/60 text-white px-3 py-2 text-2xl leading-none focus:outline-none"
+                className="absolute right-[-3rem] top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 hover:bg-black/80 text-white text-2xl leading-none focus:outline-none"
               >
                 ›
               </button>
