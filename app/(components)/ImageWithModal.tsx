@@ -8,23 +8,65 @@ interface ImageWithModalProps {
   alt: string;
   /** Wrapper classes for the thumbnail container (height, rounding, etc.) */
   wrapperClassName?: string;
+  /**
+   * Optional gallery support:
+   * - allImages: full list of image URLs in this gallery
+   * - startIndex: which index in allImages this thumbnail corresponds to
+   *
+   * If not provided, the modal just shows the single src image with no arrows.
+   */
+  allImages?: string[];
+  startIndex?: number;
 }
 
 /**
- * Renders a clickable thumbnail that opens a fullscreen modal.
- * - Click thumbnail: open modal
- * - In modal: click image to toggle zoom (scale ~150%)
- * - Click backdrop or press Escape: close
+ * Clickable thumbnail that opens a fullscreen modal.
+ * - Thumbnail uses the `src` prop.
+ * - If `allImages` and `startIndex` are provided, the modal can navigate the gallery
+ *   with left/right arrows + keyboard arrows.
+ * - Click image to toggle zoom; click backdrop or press Escape to close.
  */
 export default function ImageWithModal({
   src,
   alt,
   wrapperClassName = "",
+  allImages,
+  startIndex,
 }: ImageWithModalProps) {
   const [open, setOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
 
-  // Handle Escape key + body scroll lock
+  // Determine the gallery set; if none is provided, we just use [src]
+  const images = allImages && allImages.length > 0 ? allImages : [src];
+
+  const handleOpen = () => {
+    if (allImages && typeof startIndex === "number") {
+      setCurrentIndex(startIndex);
+    } else {
+      setCurrentIndex(0);
+    }
+    setZoomed(false);
+    setOpen(true);
+  };
+
+  const hasPrev = images.length > 1 && currentIndex > 0;
+  const hasNext = images.length > 1 && currentIndex < images.length - 1;
+  const activeSrc = images[currentIndex];
+
+  const goPrev = () => {
+    if (!hasPrev) return;
+    setCurrentIndex((index) => Math.max(0, index - 1));
+    setZoomed(false);
+  };
+
+  const goNext = () => {
+    if (!hasNext) return;
+    setCurrentIndex((index) => Math.min(images.length - 1, index + 1));
+    setZoomed(false);
+  };
+
+  // Handle Escape / arrow keys and lock body scroll
   useEffect(() => {
     if (!open) return;
 
@@ -32,6 +74,10 @@ export default function ImageWithModal({
       if (event.key === "Escape") {
         setOpen(false);
         setZoomed(false);
+      } else if (event.key === "ArrowLeft") {
+        goPrev();
+      } else if (event.key === "ArrowRight") {
+        goNext();
       }
     };
 
@@ -43,14 +89,15 @@ export default function ImageWithModal({
       window.removeEventListener("keydown", handleKey);
       document.body.style.overflow = previousOverflow;
     };
-  }, [open]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, hasPrev, hasNext, images.length]);
 
   return (
     <>
       {/* Thumbnail */}
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={handleOpen}
         className={`relative block overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-text-primary ${wrapperClassName}`}
       >
         <Image
@@ -72,30 +119,60 @@ export default function ImageWithModal({
           }}
         >
           <div
-            className="relative max-w-5xl w-full max-h-[90vh]"
+            className="relative w-full max-w-[80vw] max-h-[80vh]"
             onClick={(event) => {
-              // Prevent clicks on the image container from closing the modal
+              // prevent backdrop close when clicking inside container
               event.stopPropagation();
             }}
           >
+            {/* Image container */}
             <div
-              className="relative w-full h-[60vh] overflow-auto rounded-lg bg-black cursor-zoom-in"
+              className="relative w-full h-full overflow-auto rounded-lg bg-transparent cursor-zoom-in"
               onClick={() => setZoomed((z) => !z)}
             >
               <div
-                className={`relative w-full h-full transition-transform duration-200 ${
-                  zoomed ? "scale-150 cursor-zoom-out" : "scale-100"
+                className={`relative w-full h-full flex items-center justify-center transition-transform duration-200 ${
+                  zoomed ? "scale-[1.5] cursor-zoom-out" : "scale-100"
                 }`}
               >
-                <Image
-                  src={src}
-                  alt={alt}
-                  fill
-                  className="object-contain"
-                  sizes="100vw"
-                />
+                <div className="relative w-full h-full">
+                  <Image
+                    src={activeSrc}
+                    alt={alt}
+                    fill
+                    className="object-contain"
+                    sizes="80vw"
+                  />
+                </div>
               </div>
             </div>
+
+            {/* Left / right arrows (only when we have a gallery) */}
+            {hasPrev && (
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  goPrev();
+                }}
+                className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 hover:bg-black/60 text-white px-3 py-2 text-2xl leading-none focus:outline-none"
+              >
+                ‹
+              </button>
+            )}
+
+            {hasNext && (
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  goNext();
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 hover:bg-black/60 text-white px-3 py-2 text-2xl leading-none focus:outline-none"
+              >
+                ›
+              </button>
+            )}
           </div>
         </div>
       )}

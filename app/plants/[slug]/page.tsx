@@ -57,6 +57,8 @@ export default async function PlantPage({ params }: PlantPageProps) {
           src={plant.mainImage}
           alt={plant.commonName}
           wrapperClassName="relative w-full h-[320px] sm:h-[380px] md:h-[420px] rounded-lg bg-subtle"
+          allImages={[plant.mainImage, ...(plant.galleryImages ?? [])]}
+          startIndex={0}
         />
       </section>
 
@@ -77,12 +79,15 @@ export default async function PlantPage({ params }: PlantPageProps) {
             Photo gallery
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {plant.galleryImages.map((src) => (
+            {plant.galleryImages.map((src, index) => (
               <ImageWithModal
                 key={src}
                 src={src}
                 alt={plant.commonName}
                 wrapperClassName="relative w-full h-48 rounded-lg bg-subtle"
+                allImages={[plant.mainImage, ...(plant.galleryImages ?? [])]}
+                // +1 because index 0 is the main image in allImages
+                startIndex={index + 1}
               />
             ))}
           </div>
