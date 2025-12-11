@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "./(components)/Navbar";
+import SiteFooter from "./(components)/SiteFooter";
 
 const ibmPlexSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body className={`${ibmPlexSans.variable} antialiased bg-page text-text-primary`}>
         <Navbar />
         {children}
+        <SiteFooter />
       </body>
     </html>
   );
