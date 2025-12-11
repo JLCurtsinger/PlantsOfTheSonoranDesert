@@ -1,0 +1,127 @@
+export type PlantCategory = "cactus" | "shrub" | "tree" | "wildflower" | "other";
+
+export interface Plant {
+  slug: string;
+  commonName: string;
+  scientificName: string;
+  category: PlantCategory;
+  description: string;
+  quickFacts: { label: string; value: string }[];
+  mainImage: string;
+  galleryImages?: string[];
+}
+
+export const plants: Plant[] = [
+  {
+    slug: "saguaro-cactus",
+    commonName: "Saguaro Cactus",
+    scientificName: "Carnegiea gigantea",
+    category: "cactus",
+    description:
+      "The saguaro is a large, tree-like columnar cactus that can grow to be over 40 feet tall. It is native to the Sonoran Desert and is an iconic symbol of the American Southwest. The saguaro can live for over 150 years and typically begins to branch (grow arms) when it is 50-75 years old.",
+    quickFacts: [
+      { label: "Height", value: "Up to 40-60 feet" },
+      { label: "Bloom Season", value: "May-June" },
+      { label: "Lifespan", value: "150-200 years" },
+    ],
+    mainImage: "/images/saguaro-cactus.jpg",
+    galleryImages: [
+      "/images/saguaro-cactus-1.jpg",
+      "/images/saguaro-cactus-2.jpg",
+    ],
+  },
+  {
+    slug: "palo-verde",
+    commonName: "Blue Palo Verde",
+    scientificName: "Parkinsonia florida",
+    category: "tree",
+    description:
+      "The blue palo verde is a small to medium-sized tree with smooth, blue-green bark that photosynthesizes. It produces bright yellow flowers in spring and has small, compound leaves that drop during drought periods. The tree is drought-deciduous, meaning it can drop its leaves to conserve water.",
+    quickFacts: [
+      { label: "Height", value: "15-30 feet" },
+      { label: "Bloom Season", value: "March-April" },
+      { label: "Water Needs", value: "Very low" },
+    ],
+    mainImage: "/images/palo-verde.jpg",
+    galleryImages: [
+      "/images/palo-verde-1.jpg",
+    ],
+  },
+  {
+    slug: "ocotillo",
+    commonName: "Ocotillo",
+    scientificName: "Fouquieria splendens",
+    category: "shrub",
+    description:
+      "The ocotillo is a unique desert shrub with long, spiny, wand-like stems that can reach up to 20 feet tall. After rainfall, it quickly produces small green leaves along the stems, which it sheds during dry periods. In spring, it produces clusters of bright red tubular flowers at the tips of its stems.",
+    quickFacts: [
+      { label: "Height", value: "10-20 feet" },
+      { label: "Bloom Season", value: "March-June" },
+      { label: "Growth Pattern", value: "Deciduous" },
+    ],
+    mainImage: "/images/ocotillo.jpg",
+    galleryImages: [
+      "/images/ocotillo-1.jpg",
+    ],
+  },
+  {
+    slug: "barrel-cactus",
+    commonName: "Golden Barrel Cactus",
+    scientificName: "Echinocactus grusonii",
+    category: "cactus",
+    description:
+      "The golden barrel cactus is a large, spherical cactus with prominent ribs covered in golden-yellow spines. It grows slowly and can reach up to 3 feet in diameter. Native to central Mexico but commonly found in desert gardens, it produces yellow flowers in summer.",
+    quickFacts: [
+      { label: "Diameter", value: "Up to 3 feet" },
+      { label: "Bloom Season", value: "Summer" },
+      { label: "Growth Rate", value: "Very slow" },
+    ],
+    mainImage: "/images/barrel-cactus.jpg",
+    galleryImages: [
+      "/images/barrel-cactus-1.jpg",
+    ],
+  },
+  {
+    slug: "desert-marigold",
+    commonName: "Desert Marigold",
+    scientificName: "Baileya multiradiata",
+    category: "wildflower",
+    description:
+      "The desert marigold is a low-growing perennial wildflower with silvery-gray foliage and bright yellow, daisy-like flowers. It blooms profusely in spring and can continue flowering after summer rains. The plant is drought-tolerant and thrives in well-drained soils.",
+    quickFacts: [
+      { label: "Height", value: "6-18 inches" },
+      { label: "Bloom Season", value: "Spring-Fall" },
+      { label: "Water Needs", value: "Low" },
+    ],
+    mainImage: "/images/desert-marigold.jpg",
+    galleryImages: [
+      "/images/desert-marigold-1.jpg",
+    ],
+  },
+  {
+    slug: "creosote-bush",
+    commonName: "Creosote Bush",
+    scientificName: "Larrea tridentata",
+    category: "shrub",
+    description:
+      "The creosote bush is one of the most common and widespread desert shrubs. It has small, waxy, dark green leaves and produces small yellow flowers. The plant has a distinctive resinous smell, especially after rain. It is extremely drought-tolerant and can live for thousands of years through clonal reproduction.",
+    quickFacts: [
+      { label: "Height", value: "3-10 feet" },
+      { label: "Bloom Season", value: "Year-round" },
+      { label: "Lifespan", value: "Can live thousands of years" },
+    ],
+    mainImage: "/images/creosote-bush.jpg",
+    galleryImages: [
+      "/images/creosote-bush-1.jpg",
+    ],
+  },
+];
+
+export function getPlantBySlug(slug: string): Plant | undefined {
+  return plants.find((plant) => plant.slug === slug);
+}
+
+export function getPlantsByCategory(category: PlantCategory): Plant[] {
+  return plants.filter((plant) => plant.category === category);
+}
+
