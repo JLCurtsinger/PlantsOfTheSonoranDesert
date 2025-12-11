@@ -6,26 +6,11 @@ import Image from "next/image";
 interface ImageWithModalProps {
   src: string;
   alt: string;
-  /** Wrapper classes for the thumbnail container (height, rounding, etc.) */
   wrapperClassName?: string;
-  /**
-   * Optional gallery support:
-   * - allImages: full list of image URLs in this gallery
-   * - startIndex: which index in allImages this thumbnail corresponds to
-   *
-   * If not provided, the modal just shows the single src image with no arrows.
-   */
   allImages?: string[];
   startIndex?: number;
 }
 
-/**
- * Clickable thumbnail that opens a fullscreen modal.
- * - Thumbnail uses the `src` prop.
- * - If `allImages` and `startIndex` are provided, the modal can navigate the gallery
- *   with left/right arrows + keyboard arrows.
- * - Click image to toggle zoom; click backdrop or press Escape to close.
- */
 export default function ImageWithModal({
   src,
   alt,
@@ -37,7 +22,6 @@ export default function ImageWithModal({
   const [zoomed, setZoomed] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
 
-  // Determine the gallery set; if none is provided, we just use [src]
   const images = allImages && allImages.length > 0 ? allImages : [src];
 
   const handleOpen = () => {
@@ -66,7 +50,7 @@ export default function ImageWithModal({
     setZoomed(false);
   };
 
-  // Handle Escape / arrow keys and lock body scroll
+  // Escape + arrow keys + body scroll lock
   useEffect(() => {
     if (!open) return;
 
@@ -118,16 +102,16 @@ export default function ImageWithModal({
             setZoomed(false);
           }}
         >
+          {/* This is the central box and the positioning context for arrows */}
           <div
             className="relative w-full max-w-[80vw] max-h-[80vh]"
             onClick={(event) => {
-              // prevent backdrop close when clicking inside container
               event.stopPropagation();
             }}
           >
-            {/* Image container */}
+            {/* Image container – give it an explicit height so Next.js Image with `fill` can render */}
             <div
-              className="relative w-full h-full overflow-auto rounded-lg bg-transparent cursor-zoom-in"
+              className="relative w-full h-[70vh] max-h-[80vh] overflow-auto rounded-lg bg-black cursor-zoom-in"
               onClick={() => setZoomed((z) => !z)}
             >
               <div
@@ -147,7 +131,7 @@ export default function ImageWithModal({
               </div>
             </div>
 
-            {/* Left / right arrows (only when we have a gallery) */}
+            {/* Arrows – positioned relative to the central container */}
             {hasPrev && (
               <button
                 type="button"
