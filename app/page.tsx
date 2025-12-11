@@ -73,7 +73,8 @@ export default function Home() {
             {/* Right Column */}
             <div className="relative w-full h-[350px] md:h-[450px] rounded-lg overflow-hidden">
               <Image
-                src="/images/hero-desert.jpg"
+                // src="/images/hero-desert.jpg"
+                src="/images/hero.webp"
                 alt="Sonoran Desert landscape"
                 fill
                 className="object-cover"

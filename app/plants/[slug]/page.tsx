@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { getPlantBySlug, getPlantsByCategory, plants } from "@/lib/plants";
 import PlantCard from "../../(components)/PlantCard";
-import ImageModal from "../../(components)/ImageModal";
+import ImageViewerModal from "../../(components)/ImageViewerModal";
 
 export async function generateStaticParams() {
   return plants.map((plant) => ({
@@ -36,25 +36,9 @@ export default function PlantDetailPage({
   return (
     <main className="min-h-screen py-12 bg-page">
       <div className="max-w-6xl mx-auto px-4 md:px-6">
-        {/* Two-column layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-          {/* Column A: Main Image */}
-          <div className="relative w-full h-[500px] lg:h-[600px]">
-            <ImageModal src={plant.mainImage} alt={plant.commonName}>
-              <div className="relative w-full h-full cursor-pointer rounded-lg overflow-hidden">
-                <Image
-                  src={plant.mainImage}
-                  alt={plant.commonName}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  priority
-                />
-              </div>
-            </ImageModal>
-          </div>
-
-          {/* Column B: Plant Info */}
+        {/* Two-column layout above the fold */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+          {/* Left Column: Plant Info */}
           <div>
             <div className="mb-4">
               <span className="px-3 py-1 text-sm font-medium rounded bg-subtle text-text-secondary capitalize inline-block mb-4">
@@ -80,6 +64,22 @@ export default function PlantDetailPage({
               ))}
             </div>
           </div>
+
+          {/* Right Column: Main Image */}
+          <div className="relative w-full h-[500px] md:h-[600px]">
+            <ImageViewerModal src={plant.mainImage} alt={plant.commonName}>
+              <div className="relative w-full h-full rounded-lg overflow-hidden">
+                <Image
+                  src={plant.mainImage}
+                  alt={plant.commonName}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
+              </div>
+            </ImageViewerModal>
+          </div>
         </div>
 
         {/* About Section */}
@@ -94,29 +94,43 @@ export default function PlantDetailPage({
           </div>
         </section>
 
-        {/* Photo Gallery */}
-        {plant.galleryImages && plant.galleryImages.length > 0 && (
+        {/* Photo Details Section */}
+        {plant.detailSections && plant.detailSections.length > 0 && (
           <section className="mb-16">
-            <h2 className="text-3xl md:text-4xl font-semibold mb-6 text-text-primary">
-              Photo gallery
+            <h2 className="text-3xl md:text-4xl font-semibold mb-8 text-text-primary">
+              Photo details
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {plant.galleryImages.map((image, index) => (
-                <ImageModal
+            <div className="space-y-8">
+              {plant.detailSections.map((section, index) => (
+                <div
                   key={index}
-                  src={image}
-                  alt={`${plant.commonName} - Image ${index + 1}`}
+                  className="grid grid-cols-1 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1.8fr)] gap-6 bg-card rounded-lg p-6"
                 >
-                  <div className="relative w-full h-48 cursor-pointer rounded-lg overflow-hidden hover:opacity-90 transition-opacity">
-                    <Image
-                      src={image}
-                      alt={`${plant.commonName} - Image ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                    />
+                  {/* Image */}
+                  <div className="relative w-full h-64 md:h-full min-h-[250px]">
+                    <ImageViewerModal src={section.src} alt={section.alt}>
+                      <div className="relative w-full h-full rounded-lg overflow-hidden">
+                        <Image
+                          src={section.src}
+                          alt={section.alt}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 40vw"
+                        />
+                      </div>
+                    </ImageViewerModal>
                   </div>
-                </ImageModal>
+
+                  {/* Text Content */}
+                  <div className="flex flex-col justify-center">
+                    <h3 className="text-2xl font-semibold text-text-primary mb-3">
+                      {section.title}
+                    </h3>
+                    <p className="text-base leading-relaxed text-text-secondary">
+                      {section.description}
+                    </p>
+                  </div>
+                </div>
               ))}
             </div>
           </section>
