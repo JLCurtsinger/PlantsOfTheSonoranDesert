@@ -4,13 +4,12 @@ import Link from "next/link";
 import { plants } from "@/lib/plants";
 
 interface PlantPageProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
-export default function PlantPage({ params }: PlantPageProps) {
-  const plant = plants.find((p) => p.slug === params.slug);
+export default async function PlantPage({ params }: PlantPageProps) {
+  const { slug } = await params;
+  const plant = plants.find((p) => p.slug === slug);
 
   if (!plant) {
     notFound();
