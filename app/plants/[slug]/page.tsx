@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { plants } from "@/lib/plants";
+import ImageWithModal from "@/app/(components)/ImageWithModal";
 
 interface PlantPageProps {
   params: Promise<{ slug: string }>;
@@ -51,17 +52,12 @@ export default async function PlantPage({ params }: PlantPageProps) {
           )}
         </div>
 
-        {/* Right column: main image */}
-        <div className="relative w-full h-[320px] sm:h-[380px] md:h-[420px] rounded-lg overflow-hidden bg-subtle">
-          <Image
-            src={plant.mainImage}
-            alt={plant.commonName}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            priority
-          />
-        </div>
+        {/* Right column: main image with modal */}
+        <ImageWithModal
+          src={plant.mainImage}
+          alt={plant.commonName}
+          wrapperClassName="relative w-full h-[320px] sm:h-[380px] md:h-[420px] rounded-lg bg-subtle"
+        />
       </section>
 
       {/* About this plant */}
@@ -82,15 +78,12 @@ export default async function PlantPage({ params }: PlantPageProps) {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {plant.galleryImages.map((src) => (
-              <div key={src} className="relative w-full h-48 rounded-lg overflow-hidden bg-subtle">
-                <Image
-                  src={src}
-                  alt={plant.commonName}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
+              <ImageWithModal
+                key={src}
+                src={src}
+                alt={plant.commonName}
+                wrapperClassName="relative w-full h-48 rounded-lg bg-subtle"
+              />
             ))}
           </div>
         </section>
