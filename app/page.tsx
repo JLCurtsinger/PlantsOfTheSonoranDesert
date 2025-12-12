@@ -65,7 +65,7 @@ export default function Home() {
               </p>
               <button
                 onClick={scrollToPlants}
-                className="bg-button-bg text-button-text px-6 py-3 rounded-md font-medium transition-all duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md"
+                className="bg-button-bg text-button-text px-6 py-3 rounded-full font-medium transition-all duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md"
               >
                 Browse all plants
               </button>
@@ -98,7 +98,7 @@ export default function Home() {
               />
               <button
                 onClick={() => setSearchQuery("")}
-                className="px-6 py-3 bg-button-bg text-button-text rounded-md font-medium transition-all duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md"
+                className="px-6 py-3 bg-button-bg text-button-text rounded-full font-medium transition-all duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md"
               >
                 Search
               </button>

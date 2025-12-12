@@ -10,19 +10,19 @@ export default function Navbar() {
         <div className="flex items-center gap-6">
           <Link
             href="/"
-            className="text-text-secondary transition-colors duration-150 ease-out hover:text-white hover:underline hover:underline-offset-2"
+            className="text-text-secondary transition-all duration-150 ease-out hover:underline hover:underline-offset-2 hover:[text-shadow:0_1px_2px_rgba(0,0,0,0.1)]"
           >
             Home
           </Link>
           <Link
             href="/about"
-            className="text-text-secondary transition-colors duration-150 ease-out hover:text-white hover:underline hover:underline-offset-2"
+            className="text-text-secondary transition-all duration-150 ease-out hover:underline hover:underline-offset-2 hover:[text-shadow:0_1px_2px_rgba(0,0,0,0.1)]"
           >
             About
           </Link>
           <Link
             href="/plants"
-            className="text-text-secondary transition-colors duration-150 ease-out hover:text-white hover:underline hover:underline-offset-2"
+            className="text-text-secondary transition-all duration-150 ease-out hover:underline hover:underline-offset-2 hover:[text-shadow:0_1px_2px_rgba(0,0,0,0.1)]"
           >
             Plants
           </Link>
