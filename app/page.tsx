@@ -48,15 +48,15 @@ export default function Home() {
     <main>
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         {/* Section 1: Hero */}
-        <section className="py-12 md:py-16">
+        <section className="pt-12 pb-12 md:pt-8 md:pb-16">
           <div className="flex flex-col md:grid md:grid-cols-2 md:items-center gap-8 md:gap-12">
             <p className="text-sm font-medium text-text-secondary mb-4 uppercase tracking-wide md:[grid-row:1] md:[grid-column:1]">
               Field Guide
             </p>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-text-primary mb-6 leading-tight md:[grid-row:2] md:[grid-column:1]">
-              <span className="block">Plants</span>
-              <span className="block">of the</span>
-              <span className="block">Sonoran Desert</span>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-text-primary mb-6 leading-tight text-center md:text-left md:[grid-row:2] md:[grid-column:1]">
+              <span className="inline md:block">Plants</span>{" "}
+              <span className="inline md:block">of the</span>{" "}
+              <span className="inline md:block">Sonoran Desert</span>
             </h1>
             <div className="relative w-full h-[350px] md:h-[450px] rounded-lg overflow-hidden md:[grid-row:1/span-4] md:[grid-column:2]">
               <Image
@@ -84,7 +84,7 @@ export default function Home() {
         </section>
 
         {/* Section 2: Search + Categories */}
-        <section className="mt-8 md:mt-8">
+        <section className="mt-8 md:mt-6">
           <div className="mb-8">
             <div className="max-w-2xl mx-auto flex gap-2">
               <input
