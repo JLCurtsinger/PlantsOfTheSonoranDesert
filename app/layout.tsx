@@ -13,6 +13,9 @@ const ibmPlexSans = IBM_Plex_Sans({
 export const metadata: Metadata = {
   title: "Plants of the Sonoran Desert",
   description: "A field guide to the plants of the Sonoran Desert",
+  icons: {
+    icon: "/images/favicon.ico",
+  },
 };
 
 export default function RootLayout({
