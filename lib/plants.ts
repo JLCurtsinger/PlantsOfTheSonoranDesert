@@ -123,6 +123,88 @@ export const plants: Plant[] = [
     ],
   },
   {
+    slug: "prickly-pear",
+    commonName: "Prickly Pear",
+    scientificName: "Opuntia spp.",
+    category: "cactus",
+    description:
+      "Prickly pears are low-growing cacti with flat, paddle-shaped pads. They are common throughout the Sonoran Desert and provide food and shelter for wildlife. Many species produce edible fruits known as tunas and tender young pads called nopales.",
+    quickFacts: [
+      { label: "Height", value: "1–6 feet" },
+      { label: "Bloom Season", value: "Spring–early summer" },
+      { label: "Lifespan", value: "25–40+ years" },
+    ],
+    mainImage: "/images/prickly-pear/budding-prickly-pear.webp",
+    galleryImages: [
+      "/images/prickly-pear/budding-prickly-pear.webp",
+      "/images/prickly-pear/Mature-prickly-pear.webp",
+      "/images/prickly-pear/wild-prickly-pear.webp",
+      "/images/prickly-pear/prickly-pear-fruits.webp",
+      "/images/prickly-pear/prickly-pear-sprouts.webp",
+      "/images/prickly-pear/lakeside-prickly-pear.webp",
+      "/images/prickly-pear/prickly-pear-at-dawn.webp",
+      "/images/prickly-pear/prickly-pear-growing-on-tree.webp",
+    ],
+    detailSections: [
+      {
+        src: "/images/prickly-pear/budding-prickly-pear.webp",
+        alt: "Young prickly pear pads with new buds",
+        title: "Budding prickly pear pads",
+        description:
+          "New pads and flower buds emerging along the edges of a prickly pear pad. Young growth is often softer in color before the spines fully harden.",
+      },
+      {
+        src: "/images/prickly-pear/Mature-prickly-pear.webp",
+        alt: "Mature prickly pear cactus clump",
+        title: "Mature prickly pear clump",
+        description:
+          "A mature prickly pear forming a dense clump of pads. Older plants can spread into wide patches that provide shade and habitat for small animals.",
+      },
+      {
+        src: "/images/prickly-pear/wild-prickly-pear.webp",
+        alt: "Wild prickly pear patch in desert scrub",
+        title: "Wild desert patch",
+        description:
+          "Prickly pear growing among native desert shrubs in undisturbed habitat. These colonies help stabilize soil and offer food for desert wildlife.",
+      },
+      {
+        src: "/images/prickly-pear/prickly-pear-fruits.webp",
+        alt: "Close-up of prickly pear fruits",
+        title: "Prickly pear fruits (tunas)",
+        description:
+          "Ripe tunas developing along the top edges of the pads. The fruits range from green to deep magenta and are an important seasonal food for birds, mammals, and people.",
+      },
+      {
+        src: "/images/prickly-pear/prickly-pear-sprouts.webp",
+        alt: "Small prickly pear sprouts emerging from the ground",
+        title: "New sprouts",
+        description:
+          "Small sprouts and juvenile pads emerging near the base of older plants. Many new prickly pears sprout from fallen pads that have taken root.",
+      },
+      {
+        src: "/images/prickly-pear/lakeside-prickly-pear.webp",
+        alt: "Prickly pear growing near a lakeside shoreline",
+        title: "Lakeside prickly pear",
+        description:
+          "Prickly pear growing along a shoreline, showing how this desert cactus can thrive in rocky, well-drained soils near water features.",
+      },
+      {
+        src: "/images/prickly-pear/prickly-pear-at-dawn.webp",
+        alt: "Prickly pear cactus in warm dawn light",
+        title: "Prickly pear at dawn",
+        description:
+          "Pads catching the warm light of early morning. Cooler dawn and dusk hours are when many desert animals visit prickly pear patches.",
+      },
+      {
+        src: "/images/prickly-pear/prickly-pear-growing-on-tree.webp",
+        alt: "Prickly pear growing against or within a tree",
+        title: "Prickly pear and tree trunk",
+        description:
+          "Prickly pear growing alongside a tree trunk, using the shade and structure of the tree to help protect its pads from the harshest sun and wind.",
+      },
+    ],
+  },
+  {
     slug: "palo-verde",
     commonName: "Blue Palo Verde",
     scientificName: "Parkinsonia florida",
