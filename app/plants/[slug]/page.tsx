@@ -93,7 +93,9 @@ export default async function PlantPage({ params }: PlantPageProps) {
             Photo gallery
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {galleryDetails.map((item, index) => (
+            {galleryDetails.map((item, index) => {
+              const imageIndex = allImages.findIndex(img => img === item.src);
+              return (
               <article
                 key={item.src}
                 className="flex flex-col rounded-lg bg-card border border-border-subtle shadow-sm overflow-hidden"
@@ -104,7 +106,7 @@ export default async function PlantPage({ params }: PlantPageProps) {
                     alt={item.alt || `${plant.commonName} photo ${index + 1}`}
                     wrapperClassName="relative w-full h-full overflow-hidden"
                     allImages={allImages}
-                    startIndex={index}
+                    startIndex={imageIndex >= 0 ? imageIndex : 0}
                   />
                 </div>
 
@@ -121,7 +123,8 @@ export default async function PlantPage({ params }: PlantPageProps) {
                   )}
                 </div>
               </article>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}

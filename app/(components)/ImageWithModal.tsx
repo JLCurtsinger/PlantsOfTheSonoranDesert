@@ -31,7 +31,8 @@ export default function ImageWithModal({
 
   const handleOpen = () => {
     if (allImages && typeof startIndex === "number") {
-      setCurrentIndex(startIndex);
+      const clampedIndex = Math.max(0, Math.min(startIndex, images.length - 1));
+      setCurrentIndex(clampedIndex);
     } else {
       setCurrentIndex(0);
     }
