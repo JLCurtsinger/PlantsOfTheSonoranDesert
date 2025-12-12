@@ -24,6 +24,12 @@ export const ocotillo: Plant = {
   ],
   galleryDetails: [
     {
+      src: "/images/ocotillo/ocotillo.webp",
+      alt: "Ocotillo",
+      title: "Ocotillo",
+      description: "",
+    },
+    {
       src: "/images/ocotillo/dry-ocotillo-2.webp",
       alt: "Dry ocotillo",
       title: "Dry ocotillo",
@@ -67,6 +73,12 @@ export const ocotillo: Plant = {
     },
   ],
   detailSections: [
+    {
+      src: "/images/ocotillo/ocotillo.webp",
+      alt: "Ocotillo",
+      title: "Ocotillo",
+      description: "",
+    },
     {
       src: "/images/ocotillo/dry-ocotillo-2.webp",
       alt: "Dry ocotillo",
