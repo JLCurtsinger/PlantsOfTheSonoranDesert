@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 
 interface ImageWithModalProps {
@@ -21,6 +21,7 @@ export default function ImageWithModal({
   const [open, setOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(startIndex ?? 0);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   const images = allImages && allImages.length > 0 ? allImages : [src];
 
@@ -113,6 +114,49 @@ export default function ImageWithModal({
             <div
               className="relative max-w-[90vw] max-h-[90vh] overflow-auto rounded-lg shadow-xl cursor-zoom-in"
               onClick={() => setZoomed((z) => !z)}
+              onTouchStart={(e) => {
+                // Only track on mobile (< md breakpoint)
+                if (window.matchMedia("(min-width: 768px)").matches) return;
+                const touch = e.touches[0];
+                touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+              }}
+              onTouchMove={(e) => {
+                // Prevent default only if we're tracking a swipe
+                if (touchStartRef.current && !window.matchMedia("(min-width: 768px)").matches) {
+                  // Allow vertical scrolling, only prevent default for horizontal swipes
+                  const touch = e.touches[0];
+                  const dx = Math.abs(touch.clientX - touchStartRef.current.x);
+                  const dy = Math.abs(touch.clientY - touchStartRef.current.y);
+                  // If horizontal swipe is dominant, prevent default to avoid scrolling
+                  if (dx > dy && dx > 10) {
+                    e.preventDefault();
+                  }
+                }
+              }}
+              onTouchEnd={(e) => {
+                // Only process on mobile (< md breakpoint)
+                if (window.matchMedia("(min-width: 768px)").matches) {
+                  touchStartRef.current = null;
+                  return;
+                }
+                if (!touchStartRef.current) return;
+                const touch = e.changedTouches[0];
+                const dx = touch.clientX - touchStartRef.current.x;
+                const dy = touch.clientY - touchStartRef.current.y;
+                const absDx = Math.abs(dx);
+                const absDy = Math.abs(dy);
+                // Only trigger if horizontal swipe is dominant and exceeds threshold
+                if (absDx > 50 && absDx > absDy) {
+                  if (dx < 0) {
+                    // Swipe left - next image
+                    goNext();
+                  } else {
+                    // Swipe right - previous image
+                    goPrev();
+                  }
+                }
+                touchStartRef.current = null;
+              }}
             >
               <div className="relative flex items-center justify-center">
                 <Image
@@ -136,7 +180,7 @@ export default function ImageWithModal({
                   event.stopPropagation();
                   goPrev();
                 }}
-                className="absolute left-[-3rem] top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 hover:bg-black/80 text-white text-2xl leading-none focus:outline-none"
+                className="hidden md:flex absolute left-[-3rem] top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-black/60 hover:bg-black/80 text-white text-2xl leading-none focus:outline-none"
               >
                 ‹
               </button>
@@ -149,7 +193,7 @@ export default function ImageWithModal({
                   event.stopPropagation();
                   goNext();
                 }}
-                className="absolute right-[-3rem] top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 hover:bg-black/80 text-white text-2xl leading-none focus:outline-none"
+                className="hidden md:flex absolute right-[-3rem] top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-black/60 hover:bg-black/80 text-white text-2xl leading-none focus:outline-none"
               >
                 ›
               </button>
