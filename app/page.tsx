@@ -49,14 +49,14 @@ export default function Home() {
       <div className="max-w-6xl mx-auto px-4 md:px-6">
         {/* Section 1: Hero */}
         <section className="py-12 md:py-16">
-          <div className="flex flex-col gap-8 md:gap-12">
-            <p className="text-sm font-medium text-text-secondary mb-4 uppercase tracking-wide">
+          <div className="flex flex-col md:grid md:grid-cols-2 md:items-start gap-8 md:gap-12">
+            <p className="text-sm font-medium text-text-secondary mb-4 uppercase tracking-wide md:[grid-row:1] md:[grid-column:1]">
               Field Guide
             </p>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-text-primary mb-6 leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-text-primary mb-6 leading-tight md:[grid-row:2] md:[grid-column:1]">
               Plants of the Sonoran Desert
             </h1>
-            <div className="relative w-full h-[350px] md:h-[450px] rounded-lg overflow-hidden">
+            <div className="relative w-full h-[350px] md:h-[450px] rounded-lg overflow-hidden md:[grid-row:1/span-4] md:[grid-column:2]">
               <Image
                 // src="/images/hero-desert.jpg"
                 src="/images/hero.webp"
@@ -67,14 +67,14 @@ export default function Home() {
                 priority
               />
             </div>
-            <p className="text-lg text-text-secondary mb-8 leading-relaxed">
+            <p className="text-lg text-text-secondary mb-8 leading-relaxed md:[grid-row:3] md:[grid-column:1]">
               Discover the remarkable flora of one of North America's most diverse
               desert ecosystems. Explore cacti, shrubs, trees, and wildflowers that
               have adapted to thrive in this arid landscape.
             </p>
             <button
               onClick={scrollToPlants}
-              className="bg-button-bg text-button-text px-6 py-3 rounded-full font-medium transition-all duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md"
+              className="bg-button-bg text-button-text px-6 py-3 rounded-full font-medium transition-all duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md md:[grid-row:4] md:[grid-column:1]"
             >
               Browse all plants
             </button>
