@@ -298,4 +298,3 @@ export function getPlantBySlug(slug: string): Plant | undefined {
 export function getPlantsByCategory(category: PlantCategory): Plant[] {
   return plants.filter((plant) => plant.category === category);
 }
-
