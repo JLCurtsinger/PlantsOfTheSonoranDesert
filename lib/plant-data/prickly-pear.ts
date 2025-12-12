@@ -23,6 +23,64 @@ export const pricklyPear: Plant = {
     "/images/prickly-pear/prickly-pear-at-dawn.webp",
     "/images/prickly-pear/prickly-pear-growing-on-tree.webp",
   ],
+  galleryDetails: [
+    {
+      src: "/images/prickly-pear/budding-prickly-pear.webp",
+      alt: "Budding prickly pear with new pads forming",
+      title: "Budding prickly pear",
+      description:
+        "A prickly pear pad with fresh new buds forming along the edges, showing early-season growth in the desert light.",
+    },
+    {
+      src: "/images/prickly-pear/lakeside-prickly-pear.webp",
+      alt: "Prickly pear cactus growing beside a lake in the desert",
+      title: "Prickly pear by the water",
+      description:
+        "A prickly pear growing near the edge of a desert lake, with saguaros and rocky hills in the distance.",
+    },
+    {
+      src: "/images/prickly-pear/Mature-prickly-pear.webp",
+      alt: "Large mature prickly pear patch on rocky hillside",
+      title: "Mature prickly pear patch",
+      description:
+        "A wide, mature stand of prickly pear pads spreading across the rocky slope, forming a dense thicket.",
+    },
+    {
+      src: "/images/prickly-pear/prickly-pear-at-dawn.webp",
+      alt: "Prickly pear cactus in warm dawn light",
+      title: "Prickly pear at dawn",
+      description:
+        "Soft morning light catches a stand of prickly pear along a sandy wash, with long shadows stretching across the trail.",
+    },
+    {
+      src: "/images/prickly-pear/prickly-pear-fruits.webp",
+      alt: "Close-up of ripe red prickly pear fruits",
+      title: "Close-up of prickly pear fruits",
+      description:
+        "A close look at ripe, magenta prickly pear fruits clustered along the pad, ready for wildlife and traditional harvest.",
+    },
+    {
+      src: "/images/prickly-pear/prickly-pear-growing-on-tree.webp",
+      alt: "Prickly pear cactus growing out of a tree trunk",
+      title: "Prickly pear growing on a tree",
+      description:
+        "A prickly pear cactus rooted in the crook of a tree trunk, using the tree for support high above the ground.",
+    },
+    {
+      src: "/images/prickly-pear/prickly-pear-sprouts.webp",
+      alt: "Young prickly pear sprouts along a desert trail",
+      title: "Young prickly pear sprouts",
+      description:
+        "Small prickly pear pads emerging near a rocky trail, showing how easily this cactus spreads in disturbed soil.",
+    },
+    {
+      src: "/images/prickly-pear/wild-prickly-pear.webp",
+      alt: "Wild prickly pear cactus growing in open desert",
+      title: "Wild prickly pear in open desert",
+      description:
+        "A naturally growing prickly pear surrounded by open desert scrub and sandy washes, typical of Sonoran foothills habitat.",
+    },
+  ],
   detailSections: [
     {
       src: "/images/prickly-pear/budding-prickly-pear.webp",
