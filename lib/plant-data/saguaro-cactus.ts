@@ -40,7 +40,7 @@ export const saguaroCactus: Plant = {
       alt: "Small saguaro cactus growing under a nurse plant",
       title: "Seedling under a nurse plant",
       description:
-        "A small saguaro growing in the partial shade of another plant, which helps protect it from extreme sun and temperature swings.",
+        "A small saguaro growing in the partial shade of another plant, which helps protect it from extreme sun and temperature swings. Based on size, the small saguaro in the photo is likely around 10-20 years old!",
     },
     {
       src: "/images/saguaro/saguaroBloom.webp",
