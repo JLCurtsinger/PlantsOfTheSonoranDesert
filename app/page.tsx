@@ -74,7 +74,7 @@ export default function Home() {
             </p>
             <button
               onClick={scrollToPlants}
-              className="bg-button-bg text-button-text px-6 py-3 rounded-full font-medium transition-all duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md md:[grid-row:4] md:[grid-column:1]"
+              className="w-fit bg-button-bg text-button-text px-6 py-3 rounded-full font-medium transition-all duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md md:[grid-row:4] md:[grid-column:1]"
             >
               Browse all plants
             </button>
