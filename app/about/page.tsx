@@ -61,8 +61,8 @@ export default function AboutPage() {
               </CardContent>
             </Card>
 
-            {/* Right Card: Portrait image */}
-            <div className="flex justify-center md:block">
+            {/* Right Card: Portrait image - hidden on mobile, shown on md+ */}
+            <div className="hidden md:block">
               <Card className="overflow-hidden max-w-xs w-full md:max-w-none">
                 <div className="relative w-full aspect-[3/4]">
                   <Image
@@ -135,6 +135,22 @@ export default function AboutPage() {
 
         {/* Section E: About the creator */}
         <section>
+          {/* Portrait image - shown on mobile only, hidden on md+ */}
+          <div className="block md:hidden mb-8">
+            <div className="flex justify-center">
+              <Card className="overflow-hidden max-w-xs w-full">
+                <div className="relative w-full aspect-[3/4]">
+                  <Image
+                    src="/images/jc.webp"
+                    alt="Portrait in the Sonoran Desert"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 320px, 400px"
+                  />
+                </div>
+              </Card>
+            </div>
+          </div>
           <Card>
             <CardHeader>
               <CardTitle>About the creator</CardTitle>
