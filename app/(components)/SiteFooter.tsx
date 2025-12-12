@@ -8,7 +8,7 @@ export default function SiteFooter() {
           href="https://elev8.dev"
           target="_blank"
           rel="noreferrer"
-          className="underline-offset-2 hover:underline"
+          className="transition-colors duration-150 ease-out hover:text-white underline-offset-2 hover:underline"
         >
           ELEV8.DEV
         </a>

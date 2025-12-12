@@ -82,7 +82,7 @@ export default function ImageWithModal({
       <button
         type="button"
         onClick={handleOpen}
-        className={`relative block overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-text-primary ${wrapperClassName}`}
+        className={`relative block overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-text-primary transition-opacity duration-150 ease-out hover:opacity-90 ${wrapperClassName}`}
       >
         <Image
           src={src}

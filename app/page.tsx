@@ -65,7 +65,7 @@ export default function Home() {
               </p>
               <button
                 onClick={scrollToPlants}
-                className="bg-button-bg text-button-text px-6 py-3 rounded-md font-medium hover:opacity-90 transition-opacity"
+                className="bg-button-bg text-button-text px-6 py-3 rounded-md font-medium transition-all duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md"
               >
                 Browse all plants
               </button>
@@ -98,7 +98,7 @@ export default function Home() {
               />
               <button
                 onClick={() => setSearchQuery("")}
-                className="px-6 py-3 bg-button-bg text-button-text rounded-md font-medium hover:opacity-90 transition-opacity"
+                className="px-6 py-3 bg-button-bg text-button-text rounded-md font-medium transition-all duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md"
               >
                 Search
               </button>
@@ -111,10 +111,10 @@ export default function Home() {
               <button
                 key={category.value}
                 onClick={() => setSelectedCategory(category.value)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-150 ease-out ${
                   selectedCategory === category.value
-                    ? "bg-button-bg text-button-text"
-                    : "bg-card text-text-secondary hover:bg-subtle border border-border-subtle"
+                    ? "bg-button-bg text-button-text hover:-translate-y-0.5 hover:shadow-md"
+                    : "bg-card text-text-secondary border border-border-subtle hover:bg-subtle hover:border-text-primary hover:-translate-y-0.5"
                 }`}
               >
                 {category.label}

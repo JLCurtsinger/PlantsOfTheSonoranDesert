@@ -17,7 +17,7 @@ export default function PlantCard({ plant }: PlantCardProps) {
 
   return (
     <Link href={`/plants/${plant.slug}`}>
-      <div className="bg-card rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow hover:-translate-y-1 duration-200">
+      <div className="bg-card rounded-lg overflow-hidden shadow-sm border border-border-subtle transition-all duration-150 ease-out hover:-translate-y-1 hover:shadow-md hover:border-white">
         <div className="relative w-full h-64">
           <Image
             src={plant.mainImage}
