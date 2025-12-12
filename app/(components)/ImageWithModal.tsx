@@ -320,7 +320,7 @@ export default function ImageWithModal({
                     className={`max-h-[85vh] max-w-[90vw] w-auto h-auto object-contain transition-transform duration-200 ${
                       zoomed ? "scale-150 cursor-zoom-out" : "scale-100 cursor-zoom-in"
                     }`}
-                    sizes="90vw"
+                    sizes="(max-width: 768px) 100vw, 90vw"
                   />
                 </div>
               </div>
