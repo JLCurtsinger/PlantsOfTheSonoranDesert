@@ -32,7 +32,7 @@ export default function Navbar() {
         {/* Mobile hamburger */}
         <button
           type="button"
-          className="md:hidden flex items-center justify-center border border-black rounded-full px-3 py-2 transition-transform duration-150 ease-out hover:-translate-y-px"
+          className="md:hidden flex items-center justify-center p-2 transition-transform duration-150 ease-out hover:-translate-y-px"
           onClick={toggleMobileNav}
           aria-expanded={isOpen}
           aria-label="Toggle navigation"
