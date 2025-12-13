@@ -139,4 +139,25 @@ export const pricklyPear: Plant = {
         "Prickly pear growing alongside a tree trunk, using the shade and structure of the tree to help protect its pads from the harshest sun and wind.",
     },
   ],
+  quickId: [
+    "Flat, paddle-shaped segments (\"pads\") with small areoles",
+    "Spines vary by species; many also have tiny hair-like glochids",
+    "Bright flowers followed by red/purple fruit (\"tunas\") in season",
+    "Often forms spreading clumps",
+  ],
+  seasonalNotes: "Flowers typically appear in spring to early summer depending on rainfall and elevation. Fruit often develops in summer and can persist into fall.",
+  uses: "Pads and fruit have a long history of traditional food use in the region. This site is not a foraging guide; preparation varies by species and requires careful handling due to glochids.",
+  ethicsAndDisclaimers: [
+    "Glochids can embed in skin easily; avoid touching wild plants.",
+    "Do not harvest in protected areas and never remove whole plants.",
+    "Educational reference only; not medical or foraging advice.",
+  ],
+  wildlifeValue: [
+    "Flowers support pollinators.",
+    "Fruit and pads are food and shelter for desert wildlife, including birds and small mammals.",
+  ],
+  interestingFacts: [
+    "Glochids are tiny barbed bristles that detach easily and are harder to remove than large spines.",
+    "Some prickly pears can root from fallen pads, helping the plant spread after damage.",
+  ],
 };

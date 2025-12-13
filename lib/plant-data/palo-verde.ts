@@ -79,4 +79,24 @@ export const paloVerde: Plant = {
       description: "Wild palo verdes growing in exposed, dry habitat during a leaf-sparse season.",
     },
   ],
+  quickId: [
+    "Green bark and green branches (photosynthesize even when leafless)",
+    "Small compound leaves; airy canopy",
+    "Yellow flowers in spring (timing varies by species and rain)",
+    "Common as a \"nurse tree\" for young desert plants",
+  ],
+  seasonalNotes: "Often blooms in spring; some species can bloom again after summer rains. Leaves may drop during drought while green stems continue photosynthesis.",
+  uses: "Frequently used in desert landscaping for light shade and habitat value. Traditionally valued in the region for practical uses; this site treats uses as educational rather than instructional.",
+  ethicsAndDisclaimers: [
+    "Respect nesting wildlife and avoid disturbing trees during bloom.",
+    "Educational reference only; not medical advice.",
+  ],
+  wildlifeValue: [
+    "Important nectar source for pollinators during bloom.",
+    "Provides shade and microclimate that helps seedlings and understory plants establish.",
+  ],
+  interestingFacts: [
+    "\"Palo verde\" means \"green stick,\" referring to the tree's green, photosynthetic bark.",
+    "As a nurse plant, palo verde can improve survival odds for young cacti by reducing heat and sun stress.",
+  ],
 };

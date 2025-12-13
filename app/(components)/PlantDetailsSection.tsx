@@ -80,7 +80,7 @@ export default function PlantDetailsSection({ plant }: PlantDetailsSectionProps)
   }
 
   return (
-    <section className="mt-10 md:mt-12">
+    <section id="plant-more-info" className="mt-10 md:mt-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {sections.map((section, index) => (
           <article

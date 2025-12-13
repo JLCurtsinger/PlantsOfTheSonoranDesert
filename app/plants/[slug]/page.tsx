@@ -32,7 +32,7 @@ export default async function PlantPage({ params }: PlantPageProps) {
     }));
 
   return (
-    <main className="max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-12">
+    <main className="max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-12 scroll-smooth">
       <Link
         href="/"
         className="inline-flex items-center text-sm text-text-secondary transition-colors duration-150 ease-out hover:underline hover:underline-offset-2 mb-6"
@@ -85,6 +85,12 @@ export default async function PlantPage({ params }: PlantPageProps) {
         <p className="text-base text-text-secondary leading-relaxed">
           {plant.description}
         </p>
+        <a
+          href="#plant-more-info"
+          className="inline-block font-semibold hover:underline underline-offset-4 mt-4 mb-6"
+        >
+          More info
+        </a>
       </section>
 
       {/* Photo gallery with cards */}
