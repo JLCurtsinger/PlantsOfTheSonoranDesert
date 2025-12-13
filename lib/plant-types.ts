@@ -16,4 +16,10 @@ export interface Plant {
     description?: string;
   }[];
   detailSections?: { src: string; alt: string; title: string; description: string }[];
+  quickId?: string[];
+  seasonalNotes?: string | string[];
+  uses?: string | string[];
+  ethicsAndDisclaimers?: string | string[];
+  wildlifeValue?: string | string[];
+  interestingFacts?: string[];
 }

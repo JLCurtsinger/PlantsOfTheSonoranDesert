@@ -122,4 +122,13 @@ export const ocotillo: Plant = {
       description: "",
     },
   ],
+  quickId: ["Notes coming soon as more field photos are added."],
+  seasonalNotes: "Notes coming soon as more field photos are added.",
+  uses: "Notes coming soon as more field photos are added.",
+  ethicsAndDisclaimers: "Notes coming soon as more field photos are added.",
+  wildlifeValue: "Notes coming soon as more field photos are added.",
+  interestingFacts: [
+    "Notes coming soon as more field photos are added.",
+    "Additional details will be added as content is developed.",
+  ],
 };

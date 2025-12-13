@@ -102,4 +102,13 @@ export const saguaroCactus: Plant = {
       description: "Holes created by Gila woodpeckers and other birds that nest in saguaros. These cavities provide shelter for many desert animals, including owls, bats, and other birds.",
     },
   ],
+  quickId: ["Notes coming soon as more field photos are added."],
+  seasonalNotes: "Notes coming soon as more field photos are added.",
+  uses: "Notes coming soon as more field photos are added.",
+  ethicsAndDisclaimers: "Notes coming soon as more field photos are added.",
+  wildlifeValue: "Notes coming soon as more field photos are added.",
+  interestingFacts: [
+    "Notes coming soon as more field photos are added.",
+    "Additional details will be added as content is developed.",
+  ],
 };

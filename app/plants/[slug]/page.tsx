@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { plants } from "@/lib/plants";
 import ImageWithModal from "@/app/(components)/ImageWithModal";
+import PlantDetailsSection from "@/app/(components)/PlantDetailsSection";
 
 interface PlantPageProps {
   params: Promise<{ slug: string }>;
@@ -128,6 +129,9 @@ export default async function PlantPage({ params }: PlantPageProps) {
           </div>
         </section>
       )}
+
+      {/* Plant Details Section */}
+      <PlantDetailsSection plant={plant} />
     </main>
   );
 }

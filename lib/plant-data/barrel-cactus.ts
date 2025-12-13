@@ -80,4 +80,25 @@ export const barrelCactus: Plant = {
       description: "Cluster of smaller barrel cacti.",
     },
   ],
+  quickId: [
+    "Rounded to barrel shape with strong vertical ribs",
+    "Dense spines; many species have hooked central spines",
+    "Flowers/fruit often appear near the crown in season",
+    "Mature plants can lean toward the sun over time",
+  ],
+  seasonalNotes: "Flowers typically appear in spring (timing varies by species and rainfall). Fruit may persist at the crown after blooming.",
+  uses: "Historically used in limited survival contexts, but harvesting is not recommended. Best appreciated as habitat and a seasonal food source for wildlife via flowers and fruit.",
+  ethicsAndDisclaimers: [
+    "Avoid touching spines and do not disturb plants.",
+    "Do not harvest wild plants; some areas protect native cacti.",
+    "This site is educational and not a guide for foraging or medical use.",
+  ],
+  wildlifeValue: [
+    "Flowers support native pollinators.",
+    "Fruit and plant micro-shade can benefit insects and small wildlife.",
+  ],
+  interestingFacts: [
+    "Some barrel cacti are nicknamed \"compass cactus\" because mature plants often lean toward the sun.",
+    "The hooked spines on some species can help shade the cactus body and deter herbivores.",
+  ],
 };
