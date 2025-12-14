@@ -12,7 +12,10 @@
     "sanity:cleanup-invalid-images": "tsx scripts/sanity-cleanup-invalid-images.ts",
     "sanity:fix-array-keys": "tsx scripts/sanity-fix-array-keys.ts",
     "sanity:migrate-image-references": "tsx scripts/sanity-migrate-image-references.ts",
-    "sanity:clear-derived-fields": "tsx scripts/sanity-clear-derived-fields.ts"
+    "sanity:clear-derived-fields": "tsx scripts/sanity-clear-derived-fields.ts",
+    "sanity:inspect-plant": "tsx scripts/sanity-inspect-plant.ts",
+    "sanity:repair-plant": "tsx scripts/sanity-repair-plant.ts",
+    "sanity:fix-galleryitems-asset-refs": "tsx scripts/sanity-fix-galleryitems-asset-refs.ts"
   },
   "dependencies": {
     "@sanity/client": "^7.13.2",
