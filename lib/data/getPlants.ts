@@ -5,13 +5,47 @@ import {plants as localPlants, type Plant} from '@/lib/plants'
 
 export async function getPlantBySlug(slug: string): Promise<Plant | null> {
   const client = getSanityClient()
+  
+  // Temporary dev diagnostics - remove after confirming fix
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[getPlantBySlug] Called with slug:', slug)
+    console.log('[getPlantBySlug] Client status:', client ? 'PRESENT' : 'NULL')
+  }
+
   if (client) {
-    const sanityPlant = await client.fetch(plantBySlugQuery, {slug}).catch(() => null)
-    if (sanityPlant) return toUiPlant(sanityPlant)
+    try {
+      const sanityPlant = await client.fetch(plantBySlugQuery, {slug})
+      
+      // Temporary dev diagnostics
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[getPlantBySlug] Sanity fetch result:', sanityPlant ? {
+          _id: sanityPlant._id,
+          slug: sanityPlant.slug,
+          title: sanityPlant.title,
+          hasAbout: !!sanityPlant.about,
+          aboutLength: sanityPlant.about?.length || 0,
+        } : 'NULL')
+      }
+      
+      if (sanityPlant) return toUiPlant(sanityPlant)
+    } catch (error) {
+      // Surface fetch errors instead of swallowing them
+      if (process.env.NODE_ENV === 'development') {
+        console.error('[getPlantBySlug] Sanity fetch error:', error)
+      }
+      // Continue to fallback on error
+    }
   }
 
   // fallback if not yet migrated or Sanity not configured
-  return localPlants.find((p) => p.slug === slug) ?? null
+  const localPlant = localPlants.find((p) => p.slug === slug) ?? null
+  
+  // Temporary dev diagnostics
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[getPlantBySlug] Using fallback:', localPlant ? 'LOCAL' : 'NOT_FOUND')
+  }
+  
+  return localPlant
 }
 
 export async function getAllPlants(): Promise<Plant[]> {

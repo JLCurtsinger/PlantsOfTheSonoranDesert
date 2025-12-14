@@ -5,6 +5,9 @@ import { getPlantBySlug } from "@/lib/data/getPlants";
 import ImageWithModal from "@/app/(components)/ImageWithModal";
 import PlantDetailsSection from "@/app/(components)/PlantDetailsSection";
 
+// Force dynamic rendering to prevent static caching
+export const dynamic = 'force-dynamic'
+
 interface PlantPageProps {
   params: Promise<{ slug: string }>;
 }
