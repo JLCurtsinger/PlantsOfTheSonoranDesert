@@ -9,6 +9,11 @@ export const plantBySlugQuery = groq`
     about,
     additionalInfo,
     uses,
+    quickIdChecklist,
+    seasonalNotes,
+    ethicsAndDisclaimers,
+    wildlifeValue,
+    interestingFacts,
     sortOrder,
     heroImage{
       ...,
@@ -36,6 +41,11 @@ export const allPlantsQuery = groq`
     about,
     additionalInfo,
     uses,
+    quickIdChecklist,
+    seasonalNotes,
+    ethicsAndDisclaimers,
+    wildlifeValue,
+    interestingFacts,
     sortOrder,
     heroImage{
       ...,

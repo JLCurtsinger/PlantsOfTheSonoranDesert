@@ -9,6 +9,11 @@ type SanityPlant = {
   about: string
   additionalInfo?: string
   uses?: string
+  quickIdChecklist?: string[]
+  seasonalNotes?: string
+  ethicsAndDisclaimers?: string
+  wildlifeValue?: string
+  interestingFacts?: string[]
   sortOrder?: number
   heroImage: any
   gallery?: any[]
@@ -77,11 +82,11 @@ export function toUiPlant(p: SanityPlant, localPlant?: Plant): Plant {
     galleryImages,
     galleryDetails,
     detailSections: detailSections.length > 0 ? detailSections : undefined,
+    quickId: p.quickIdChecklist ?? localPlant?.quickId,
+    seasonalNotes: p.seasonalNotes ?? localPlant?.seasonalNotes,
     uses: p.uses ?? localPlant?.uses,
-    quickId: localPlant?.quickId,
-    seasonalNotes: localPlant?.seasonalNotes,
-    ethicsAndDisclaimers: localPlant?.ethicsAndDisclaimers,
-    wildlifeValue: localPlant?.wildlifeValue,
-    interestingFacts: localPlant?.interestingFacts,
+    ethicsAndDisclaimers: p.ethicsAndDisclaimers ?? localPlant?.ethicsAndDisclaimers,
+    wildlifeValue: p.wildlifeValue ?? localPlant?.wildlifeValue,
+    interestingFacts: p.interestingFacts ?? localPlant?.interestingFacts,
   }
 }

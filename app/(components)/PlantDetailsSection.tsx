@@ -5,11 +5,7 @@ interface PlantDetailsSectionProps {
 }
 
 export default function PlantDetailsSection({ plant }: PlantDetailsSectionProps) {
-  // Helper to normalize string or string[] to array
-  const normalizeToArray = (value: string | string[] | undefined): string[] => {
-    if (!value) return [];
-    return Array.isArray(value) ? value : [value];
-  };
+  const PLACEHOLDER_TEXT = "Notes coming soon as more field photos are added.";
 
   // Helper to render list items
   const renderList = (items: string[]) => (
@@ -23,61 +19,43 @@ export default function PlantDetailsSection({ plant }: PlantDetailsSectionProps)
   );
 
   // Helper to render content (handles both string and array)
-  const renderContent = (value: string | string[] | undefined) => {
-    if (!value) return null;
+  const renderContent = (value: string | string[] | undefined, isArray: boolean) => {
+    // If value is an array, render as list
     if (Array.isArray(value)) {
-      return renderList(value);
+      const items = value.length > 0 ? value : [PLACEHOLDER_TEXT];
+      return renderList(items);
     }
-    return <p className="text-sm text-text-secondary leading-relaxed">{value}</p>;
+    // Otherwise render as text
+    const text = value || PLACEHOLDER_TEXT;
+    return <p className="text-sm text-text-secondary leading-relaxed">{text}</p>;
   };
 
-  const sections = [];
-
-  if (plant.quickId && plant.quickId.length > 0) {
-    sections.push({
+  const sections = [
+    {
       title: "Quick ID Checklist",
-      content: renderList(plant.quickId),
-    });
-  }
-
-  if (plant.seasonalNotes) {
-    sections.push({
+      content: renderContent(plant.quickId, true),
+    },
+    {
       title: "Seasonal Notes",
-      content: renderContent(plant.seasonalNotes),
-    });
-  }
-
-  if (plant.uses) {
-    sections.push({
+      content: renderContent(plant.seasonalNotes, false),
+    },
+    {
       title: "Uses",
-      content: renderContent(plant.uses),
-    });
-  }
-
-  if (plant.ethicsAndDisclaimers) {
-    sections.push({
+      content: renderContent(plant.uses, false),
+    },
+    {
       title: "Ethics + Disclaimers",
-      content: renderContent(plant.ethicsAndDisclaimers),
-    });
-  }
-
-  if (plant.wildlifeValue) {
-    sections.push({
+      content: renderContent(plant.ethicsAndDisclaimers, false),
+    },
+    {
       title: "Wildlife Value",
-      content: renderContent(plant.wildlifeValue),
-    });
-  }
-
-  if (plant.interestingFacts && plant.interestingFacts.length > 0) {
-    sections.push({
+      content: renderContent(plant.wildlifeValue, false),
+    },
+    {
       title: "Interesting Facts",
-      content: renderList(plant.interestingFacts.slice(0, 2)),
-    });
-  }
-
-  if (sections.length === 0) {
-    return null;
-  }
+      content: renderContent(plant.interestingFacts, true),
+    },
+  ];
 
   return (
     <section id="plant-more-info" className="mt-10 md:mt-12">
