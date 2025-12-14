@@ -321,6 +321,10 @@ async function main() {
   }
 
   // Repair published document
+  if (!baseId) {
+    console.error(`❌ Cannot repair: baseId is null`)
+    process.exit(1)
+  }
   await repairDocument(baseId, published, false)
 
   // Repair draft document if it exists
@@ -479,4 +483,5 @@ main().catch((error) => {
   console.error('\n❌ Error:', error)
   process.exit(1)
 })
+
 
