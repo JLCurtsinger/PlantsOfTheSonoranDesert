@@ -1,4 +1,4 @@
-import imageUrlBuilder from '@sanity/image-url'
+import {createImageUrlBuilder} from '@sanity/image-url'
 import {getSanityClient} from './client'
 
 // Lightweight type for Sanity image source
@@ -11,6 +11,6 @@ export function urlForImage(source: SanityImageSource) {
     // This should not happen in practice when Sanity is properly set up
     throw new Error('Sanity client not configured')
   }
-  const builder = imageUrlBuilder(client)
+  const builder = createImageUrlBuilder(client)
   return builder.image(source).auto('format')
 }
