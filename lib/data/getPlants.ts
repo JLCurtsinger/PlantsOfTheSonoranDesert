@@ -12,6 +12,9 @@ export async function getPlantBySlug(slug: string): Promise<Plant | null> {
     console.log('[getPlantBySlug] Client status:', client ? 'PRESENT' : 'NULL')
   }
 
+  // Get local plant for merging with Sanity data
+  const localPlant = localPlants.find((p) => p.slug === slug) ?? null
+
   if (client) {
     try {
       const sanityPlant = await client.fetch(plantBySlugQuery, {slug})
@@ -27,7 +30,7 @@ export async function getPlantBySlug(slug: string): Promise<Plant | null> {
         } : 'NULL')
       }
       
-      if (sanityPlant) return toUiPlant(sanityPlant)
+      if (sanityPlant) return toUiPlant(sanityPlant, localPlant ?? undefined)
     } catch (error) {
       // Surface fetch errors instead of swallowing them
       if (process.env.NODE_ENV === 'development') {
@@ -36,9 +39,6 @@ export async function getPlantBySlug(slug: string): Promise<Plant | null> {
       // Continue to fallback on error
     }
   }
-
-  // fallback if not yet migrated or Sanity not configured
-  const localPlant = localPlants.find((p) => p.slug === slug) ?? null
   
   // Temporary dev diagnostics
   if (process.env.NODE_ENV === 'development') {
@@ -54,7 +54,11 @@ export async function getAllPlants(): Promise<Plant[]> {
   
   if (client) {
     const sanityPlants = await client.fetch(allPlantsQuery).catch(() => [])
-    sanityMapped = Array.isArray(sanityPlants) ? sanityPlants.map(toUiPlant) : []
+    // Create a map of local plants by slug for efficient lookup
+    const localPlantsMap = new Map(localPlants.map(p => [p.slug, p]))
+    sanityMapped = Array.isArray(sanityPlants) 
+      ? sanityPlants.map(p => toUiPlant(p, localPlantsMap.get(p.slug))) 
+      : []
   }
 
   // Merge strategy:
