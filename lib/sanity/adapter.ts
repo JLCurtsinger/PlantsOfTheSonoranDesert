@@ -17,6 +17,13 @@ type SanityPlant = {
   sortOrder?: number
   heroImage: any
   gallery?: any[]
+  detailSections?: Array<{
+    key: string
+    title: string
+    alt?: string
+    description: string
+    image: any
+  }>
 }
 
 // Maps Sanity plant data to the UI Plant type structure
@@ -63,11 +70,19 @@ export function toUiPlant(p: SanityPlant, localPlant?: Plant): Plant {
     galleryDetails = localPlant.galleryDetails || []
   }
 
-  // Handle detailSections - use local data only
+  // Handle detailSections - prefer Sanity, fallback to local
   let detailSections: Array<{src: string; alt: string; title: string; description: string}> = []
   
-  if (localPlant?.detailSections) {
-    // Use local detailSections if available
+  if (p.detailSections && p.detailSections.length > 0) {
+    // Use detailSections from Sanity
+    detailSections = p.detailSections.map(section => ({
+      src: urlForImage(section.image).width(1200).quality(85).url(),
+      alt: section.alt || section.title || '',
+      title: section.title,
+      description: section.description,
+    }))
+  } else if (localPlant?.detailSections) {
+    // Fallback to local detailSections if Sanity has none
     detailSections = localPlant.detailSections
   }
 

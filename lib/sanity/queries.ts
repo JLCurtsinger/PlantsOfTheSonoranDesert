@@ -28,12 +28,25 @@ export const plantBySlugQuery = groq`
         _id,
         originalFilename
       }
+    },
+    detailSections[]{
+      key,
+      title,
+      alt,
+      description,
+      image{
+        ...,
+        asset->{
+          _id,
+          originalFilename
+        }
+      }
     }
   }
 `
 
 export const allPlantsQuery = groq`
-  *[_type == "plant"] | order(sortOrder asc, title asc){
+  *[_type == "plant"] | order(coalesce(sortOrder, 999) asc, title asc){
     _id,
     title,
     "slug": slug.current,
@@ -59,6 +72,19 @@ export const allPlantsQuery = groq`
       asset->{
         _id,
         originalFilename
+      }
+    },
+    detailSections[]{
+      key,
+      title,
+      alt,
+      description,
+      image{
+        ...,
+        asset->{
+          _id,
+          originalFilename
+        }
       }
     }
   }
