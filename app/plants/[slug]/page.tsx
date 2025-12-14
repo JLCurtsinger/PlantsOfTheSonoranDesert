@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { plants } from "@/lib/plants";
+import { getPlantBySlug } from "@/lib/data/getPlants";
 import ImageWithModal from "@/app/(components)/ImageWithModal";
 import PlantDetailsSection from "@/app/(components)/PlantDetailsSection";
 
@@ -11,7 +11,7 @@ interface PlantPageProps {
 
 export default async function PlantPage({ params }: PlantPageProps) {
   const { slug } = await params;
-  const plant = plants.find((p) => p.slug === slug);
+  const plant = await getPlantBySlug(slug);
 
   if (!plant) {
     notFound();
