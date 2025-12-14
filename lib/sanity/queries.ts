@@ -10,19 +10,19 @@ export const plantBySlugQuery = groq`
     additionalInfo,
     uses,
     sortOrder,
-    heroImage,
-    gallery,
-    galleryItems[]{
-      image,
-      title,
-      description,
-      alt
+    heroImage{
+      ...,
+      asset->{
+        _id,
+        originalFilename
+      }
     },
-    detailSections[]{
-      image,
-      title,
-      description,
-      alt
+    gallery[]{
+      ...,
+      asset->{
+        _id,
+        originalFilename
+      }
     }
   }
 `
@@ -37,19 +37,19 @@ export const allPlantsQuery = groq`
     additionalInfo,
     uses,
     sortOrder,
-    heroImage,
-    gallery,
-    galleryItems[]{
-      image,
-      title,
-      description,
-      alt
+    heroImage{
+      ...,
+      asset->{
+        _id,
+        originalFilename
+      }
     },
-    detailSections[]{
-      image,
-      title,
-      description,
-      alt
+    gallery[]{
+      ...,
+      asset->{
+        _id,
+        originalFilename
+      }
     }
   }
 `

@@ -7,7 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "sanity:populate:saguaro": "tsx scripts/sanity-populate-saguaro.ts"
+    "sanity:populate:saguaro": "tsx scripts/sanity-populate-saguaro.ts",
+    "sanity:sync-plant": "tsx scripts/sanity-sync-plant.ts",
+    "sanity:cleanup-invalid-images": "tsx scripts/sanity-cleanup-invalid-images.ts",
+    "sanity:fix-array-keys": "tsx scripts/sanity-fix-array-keys.ts",
+    "sanity:migrate-image-references": "tsx scripts/sanity-migrate-image-references.ts",
+    "sanity:clear-derived-fields": "tsx scripts/sanity-clear-derived-fields.ts"
   },
   "dependencies": {
     "@sanity/client": "^7.13.2",
@@ -27,7 +32,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.9",
     "tailwindcss": "^4",
-    "tsx": "^4.19.2",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

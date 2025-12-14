@@ -1,20 +1,6 @@
 import {urlForImage} from './image'
 import type {Plant} from '../plant-types'
 
-type SanityGalleryItem = {
-  image: any
-  title?: string
-  description?: string
-  alt?: string
-}
-
-type SanityDetailSection = {
-  image: any
-  title: string
-  description: string
-  alt?: string
-}
-
 type SanityPlant = {
   _id: string
   title: string
@@ -26,8 +12,6 @@ type SanityPlant = {
   sortOrder?: number
   heroImage: any
   gallery?: any[]
-  galleryItems?: SanityGalleryItem[]
-  detailSections?: SanityDetailSection[]
 }
 
 // Maps Sanity plant data to the UI Plant type structure
@@ -36,63 +20,49 @@ type SanityPlant = {
 export function toUiPlant(p: SanityPlant, localPlant?: Plant): Plant {
   const mainImage = urlForImage(p.heroImage).width(2000).quality(85).url()
   
-  // Handle galleryItems (new structure with captions)
+  // Build gallery deterministically from heroImage + gallery[]
+  // Index 0 = heroImage, indices 1+ = gallery[] items
   let galleryImages: string[] = []
   let galleryDetails: Array<{src: string; alt: string; title?: string; description?: string}> = []
   
-  if (p.galleryItems && p.galleryItems.length > 0) {
-    // Use new galleryItems structure
-    galleryImages = p.galleryItems.map(item => 
-      urlForImage(item.image).width(1800).quality(85).url()
-    )
-    galleryDetails = p.galleryItems.map((item, index) => ({
-      src: urlForImage(item.image).width(1800).quality(85).url(),
-      alt: item.alt || `${p.title} photo ${index + 1}`,
-      title: item.title,
-      description: item.description,
-    }))
-  } else if (p.gallery && p.gallery.length > 0) {
-    // Fallback to old gallery structure (backwards compatibility)
-    galleryImages = p.gallery.map(img => 
+  // Build combined image array: [heroImage, ...gallery] (skip nulls)
+  const combinedImages: any[] = []
+  if (p.heroImage) {
+    combinedImages.push(p.heroImage)
+  }
+  if (p.gallery && p.gallery.length > 0) {
+    combinedImages.push(...p.gallery.filter(img => img != null))
+  }
+  
+  if (combinedImages.length > 0) {
+    // Create galleryImages from combined array
+    galleryImages = combinedImages.map(img => 
       urlForImage(img).width(1800).quality(85).url()
     )
-    // Try to match with local galleryDetails if available
-    if (localPlant?.galleryDetails && localPlant.galleryDetails.length > 0) {
-      galleryDetails = galleryImages.map((src, index) => {
-        const localMatch = localPlant.galleryDetails?.find(g => g.src === src) || 
-                          localPlant.galleryDetails?.[index]
-        return {
-          src,
-          alt: localMatch?.alt || `${p.title} photo ${index + 1}`,
-          title: localMatch?.title,
-          description: localMatch?.description,
-        }
-      })
-    } else {
-      galleryDetails = galleryImages.map((src, index) => ({
+    
+    // Create galleryDetails by indexing into localPlant.galleryDetails
+    // localPlant.galleryDetails[0] corresponds to heroImage (index 0)
+    // localPlant.galleryDetails[1+] corresponds to gallery[] items (indices 1+)
+    galleryDetails = galleryImages.map((src, index) => {
+      const localCaption = localPlant?.galleryDetails?.[index]
+      return {
         src,
-        alt: `${p.title} photo ${index + 1}`,
-        title: undefined,
-        description: undefined,
-      }))
-    }
+        alt: localCaption?.alt || `${p.title} photo ${index + 1}`,
+        title: localCaption?.title,
+        description: localCaption?.description,
+      }
+    })
   } else if (localPlant?.galleryImages) {
     // Fallback to local gallery if Sanity has none
     galleryImages = localPlant.galleryImages
     galleryDetails = localPlant.galleryDetails || []
   }
 
-  // Handle detailSections
+  // Handle detailSections - use local data only
   let detailSections: Array<{src: string; alt: string; title: string; description: string}> = []
-  if (p.detailSections && p.detailSections.length > 0) {
-    detailSections = p.detailSections.map(section => ({
-      src: urlForImage(section.image).width(1800).quality(85).url(),
-      alt: section.alt || section.title,
-      title: section.title,
-      description: section.description,
-    }))
-  } else if (localPlant?.detailSections) {
-    // Fallback to local detailSections if Sanity has none
+  
+  if (localPlant?.detailSections) {
+    // Use local detailSections if available
     detailSections = localPlant.detailSections
   }
 
