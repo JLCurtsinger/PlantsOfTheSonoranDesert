@@ -115,6 +115,37 @@ function deriveKeyFromPath(imagePath: string): string {
     .replace(/[-_]/g, '')
 }
 
+/**
+ * Derives a non-empty title for detailSections with fallback logic.
+ * Prefers local title, then key, then cleaned filename (Title Case).
+ * This ensures titles are never blank, preventing validation errors.
+ */
+function deriveDetailSectionTitle(
+  section: { title?: string; src: string },
+  key?: string
+): string {
+  // Prefer local title if present and non-empty
+  if (section.title && section.title.trim()) {
+    return section.title.trim()
+  }
+  
+  // Fall back to key if provided
+  if (key && key.trim()) {
+    // Convert camelCase to Title Case
+    return key
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, str => str.toUpperCase())
+      .trim()
+  }
+  
+  // Final fallback: cleaned filename (no extension, replace hyphens with spaces, Title Case)
+  const basename = section.src.split('/').pop()?.replace(/\.[^.]+$/, '') || 'Untitled'
+  return basename
+    .replace(/[-_]/g, ' ')
+    .replace(/\b\w/g, char => char.toUpperCase())
+    .trim()
+}
+
 async function main() {
   console.log(`\n🌵 Migrating Prickly Pear to Sanity`)
   console.log(`   Project: ${projectId}`)
@@ -218,15 +249,16 @@ async function main() {
     }
     
     const key = deriveKeyFromPath(section.src)
+    const title = deriveDetailSectionTitle(section, key)
     
     return {
       _type: 'detailSection' as const,
       _key: key,
       key: key,
       image: createImageRef(assetId),
-      title: section.title,
+      title: title,
       description: section.description,
-      alt: section.alt || section.title,
+      alt: section.alt || title,
     }
   })
 
