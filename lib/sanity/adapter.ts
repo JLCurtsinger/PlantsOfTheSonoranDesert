@@ -30,7 +30,8 @@ type SanityPlant = {
 // This is the single place where Sanity fields map to the existing UI plant shape
 // Optionally merges with local plant data for fields missing in Sanity
 export function toUiPlant(p: SanityPlant, localPlant?: Plant): Plant {
-  const mainImage = urlForImage(p.heroImage).width(2000).quality(85).url()
+  // Build base URL without width/quality - the loader will handle responsive sizing
+  const mainImage = urlForImage(p.heroImage).url()
   
   // Build gallery deterministically from heroImage + gallery[]
   // Index 0 = heroImage, indices 1+ = gallery[] items
@@ -47,9 +48,9 @@ export function toUiPlant(p: SanityPlant, localPlant?: Plant): Plant {
   }
   
   if (combinedImages.length > 0) {
-    // Create galleryImages from combined array
+    // Create galleryImages from combined array - base URLs without width/quality
     galleryImages = combinedImages.map(img => 
-      urlForImage(img).width(1800).quality(85).url()
+      urlForImage(img).url()
     )
     
     // Create galleryDetails by indexing into localPlant.galleryDetails
@@ -74,9 +75,9 @@ export function toUiPlant(p: SanityPlant, localPlant?: Plant): Plant {
   let detailSections: Array<{src: string; alt: string; title: string; description: string}> = []
   
   if (p.detailSections && p.detailSections.length > 0) {
-    // Use detailSections from Sanity
+    // Use detailSections from Sanity - base URLs without width/quality
     detailSections = p.detailSections.map(section => ({
-      src: urlForImage(section.image).width(1200).quality(85).url(),
+      src: urlForImage(section.image).url(),
       alt: section.alt || section.title || '',
       title: section.title,
       description: section.description,

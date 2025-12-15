@@ -77,6 +77,8 @@ export default async function PlantPage({ params }: PlantPageProps) {
           wrapperClassName="relative w-full h-[320px] sm:h-[380px] md:h-[420px] rounded-lg bg-subtle"
           allImages={[plant.mainImage, ...(plant.galleryImages ?? [])]}
           startIndex={0}
+          thumbnailSizes="(max-width: 768px) 100vw, 50vw"
+          modalSizes="100vw"
         />
       </section>
 
@@ -117,6 +119,8 @@ export default async function PlantPage({ params }: PlantPageProps) {
                     wrapperClassName="relative w-full h-full overflow-hidden"
                     allImages={allImages}
                     startIndex={imageIndex >= 0 ? imageIndex : 0}
+                    thumbnailSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    modalSizes="100vw"
                   />
                 </div>
 

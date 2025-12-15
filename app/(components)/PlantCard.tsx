@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Plant } from "@/lib/plants";
+import { sanityImageLoader } from "@/lib/sanity/image";
 
 interface PlantCardProps {
   plant: Plant;
@@ -24,7 +25,8 @@ export default function PlantCard({ plant }: PlantCardProps) {
             alt={plant.commonName}
             fill
             className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            loader={sanityImageLoader}
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         </div>
         <div className="p-4">

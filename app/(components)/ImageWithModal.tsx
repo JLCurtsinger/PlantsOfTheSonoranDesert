@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import { sanityImageLoader } from "@/lib/sanity/image";
 
 interface ImageWithModalProps {
   src: string;
@@ -9,6 +10,8 @@ interface ImageWithModalProps {
   wrapperClassName?: string;
   allImages?: string[];
   startIndex?: number;
+  thumbnailSizes?: string;
+  modalSizes?: string;
 }
 
 export default function ImageWithModal({
@@ -17,6 +20,8 @@ export default function ImageWithModal({
   wrapperClassName = "",
   allImages,
   startIndex,
+  thumbnailSizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
+  modalSizes = "100vw",
 }: ImageWithModalProps) {
   const [open, setOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);
@@ -189,7 +194,8 @@ export default function ImageWithModal({
           alt={alt}
           fill
           className="object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
+          loader={sanityImageLoader}
+          sizes={thumbnailSizes}
         />
       </button>
 
@@ -320,7 +326,8 @@ export default function ImageWithModal({
                     className={`max-h-[85vh] max-w-[90vw] w-auto h-auto object-contain transition-transform duration-200 ${
                       zoomed ? "scale-150 cursor-zoom-out" : "scale-100 cursor-zoom-in"
                     }`}
-                    sizes="(max-width: 768px) 100vw, 90vw"
+                    loader={sanityImageLoader}
+                    sizes={modalSizes}
                   />
                 </div>
               </div>

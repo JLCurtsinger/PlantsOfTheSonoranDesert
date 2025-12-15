@@ -1,7 +1,7 @@
 import type { Plant } from "../plant-types";
 
 export const creosoteBush: Plant = {
-  slug: "creosote",
+  slug: "creosote-bush",
   commonName: "Creosote Bush",
   scientificName: "Larrea tridentata",
   category: "shrub",
