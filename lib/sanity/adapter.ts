@@ -16,11 +16,15 @@ type SanityPlant = {
   interestingFacts?: string[]
   sortOrder?: number
   heroImage: any
-  gallery?: any[]
+  gallery?: Array<{
+    _key?: string
+    [key: string]: any
+  }>
   detailSections?: Array<{
     key: string
     title: string
     alt?: string
+    galleryKey?: string
     description: string
     image: any
   }>
@@ -53,16 +57,34 @@ export function toUiPlant(p: SanityPlant, localPlant?: Plant): Plant {
       urlForImage(img).url()
     )
     
-    // Build a map of detailSection image URLs to their metadata for matching
+    // Build a map of galleryKey -> caption data for primary lookup
+    const detailByGalleryKey = new Map<string, {title: string; alt: string; description: string}>()
+    
+    // Build a map of detailSection image URLs to their metadata for fallback matching
     const detailSectionMap = new Map<string, {title: string; alt: string; description: string}>()
+    
     if (p.detailSections && p.detailSections.length > 0) {
       p.detailSections.forEach(section => {
+        // Defensive guard: Sanity content can be incomplete or have null assets
+        const assetRef = section?.image?.asset?._ref
+        if (!assetRef) return
+
         const sectionImageUrl = urlForImage(section.image).url()
-        detailSectionMap.set(sectionImageUrl, {
-          title: section.title,
+        if (!sectionImageUrl) return
+
+        const captionData = {
+          title: section.title || '',
           alt: section.alt || section.title || '',
-          description: section.description,
-        })
+          description: section.description || '',
+        }
+        
+        // Primary: map by galleryKey if set
+        if (section.galleryKey) {
+          detailByGalleryKey.set(section.galleryKey, captionData)
+        }
+        
+        // Fallback: also map by URL for backward compatibility
+        detailSectionMap.set(sectionImageUrl, captionData)
       })
     }
     
@@ -70,9 +92,22 @@ export function toUiPlant(p: SanityPlant, localPlant?: Plant): Plant {
     // localPlant.galleryDetails[0] corresponds to heroImage (index 0)
     // localPlant.galleryDetails[1+] corresponds to gallery[] items (indices 1+)
     galleryDetails = galleryImages.map((src, index) => {
-      // Try to match with detailSections by image URL
-      const detailSection = detailSectionMap.get(src)
-      // Fall back to localPlant.galleryDetails if no detailSection match
+      let detailSection: {title: string; alt: string; description: string} | undefined
+      
+      // Priority 1: Match by galleryKey using gallery item _key (only for gallery items, not hero)
+      if (index > 0 && p.gallery && p.gallery[index - 1]) {
+        const galleryItem = p.gallery[index - 1]
+        if (galleryItem._key && detailByGalleryKey.has(galleryItem._key)) {
+          detailSection = detailByGalleryKey.get(galleryItem._key)
+        }
+      }
+      
+      // Priority 2: Fallback to URL-based matching
+      if (!detailSection) {
+        detailSection = detailSectionMap.get(src)
+      }
+      
+      // Priority 3: Fall back to localPlant.galleryDetails if no detailSection match
       const localCaption = localPlant?.galleryDetails?.[index]
       
       return {
@@ -93,12 +128,22 @@ export function toUiPlant(p: SanityPlant, localPlant?: Plant): Plant {
   
   if (p.detailSections && p.detailSections.length > 0) {
     // Use detailSections from Sanity - base URLs without width/quality
-    detailSections = p.detailSections.map(section => ({
-      src: urlForImage(section.image).url(),
-      alt: section.alt || section.title || '',
-      title: section.title,
-      description: section.description,
-    }))
+    // Defensive guard: Sanity content can be incomplete or have null assets
+    detailSections = p.detailSections
+      .filter(section => {
+        const assetRef = section?.image?.asset?._ref
+        return !!assetRef
+      })
+      .map(section => {
+        const sectionImageUrl = urlForImage(section.image).url()
+        return {
+          src: sectionImageUrl || '',
+          alt: section.alt || section.title || '',
+          title: section.title || '',
+          description: section.description || '',
+        }
+      })
+      .filter(section => section.src) // Remove entries with empty URLs
   } else if (localPlant?.detailSections) {
     // Fallback to local detailSections if Sanity has none
     detailSections = localPlant.detailSections

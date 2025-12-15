@@ -18,7 +18,9 @@
     "sanity:repair-plant-array-item-types": "tsx scripts/sanity-repair-plant-array-item-types.ts",
     "sanity:fix-galleryitems-asset-refs": "tsx scripts/sanity-fix-galleryitems-asset-refs.ts",
     "sanity:fix-draft-image-asset-refs": "tsx scripts/sanity-fix-draft-image-asset-refs.ts",
-    "sanity:dump-plant-raw": "tsx scripts/sanity-dump-plant-raw.ts"
+    "sanity:dump-plant-raw": "tsx scripts/sanity-dump-plant-raw.ts",
+    "sanity:migrate-agave": "tsx scripts/sanity-migrate-agave.ts",
+    "sanity:link-agave-gallery-keys": "tsx scripts/sanity-link-agave-gallery-keys.ts"
   },
   "dependencies": {
     "@sanity/client": "^7.13.2",

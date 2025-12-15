@@ -23,6 +23,7 @@ export const plantBySlugQuery = groq`
       }
     },
     gallery[]{
+      _key,
       ...,
       asset->{
         _id,
@@ -33,6 +34,7 @@ export const plantBySlugQuery = groq`
       key,
       title,
       alt,
+      galleryKey,
       description,
       image{
         ...,
@@ -68,6 +70,7 @@ export const allPlantsQuery = groq`
       }
     },
     gallery[]{
+      _key,
       ...,
       asset->{
         _id,
@@ -78,6 +81,7 @@ export const allPlantsQuery = groq`
       key,
       title,
       alt,
+      galleryKey,
       description,
       image{
         ...,
