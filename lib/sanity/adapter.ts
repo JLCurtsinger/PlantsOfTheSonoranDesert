@@ -53,16 +53,33 @@ export function toUiPlant(p: SanityPlant, localPlant?: Plant): Plant {
       urlForImage(img).url()
     )
     
-    // Create galleryDetails by indexing into localPlant.galleryDetails
+    // Build a map of detailSection image URLs to their metadata for matching
+    const detailSectionMap = new Map<string, {title: string; alt: string; description: string}>()
+    if (p.detailSections && p.detailSections.length > 0) {
+      p.detailSections.forEach(section => {
+        const sectionImageUrl = urlForImage(section.image).url()
+        detailSectionMap.set(sectionImageUrl, {
+          title: section.title,
+          alt: section.alt || section.title || '',
+          description: section.description,
+        })
+      })
+    }
+    
+    // Create galleryDetails by matching with detailSections first, then localPlant.galleryDetails
     // localPlant.galleryDetails[0] corresponds to heroImage (index 0)
     // localPlant.galleryDetails[1+] corresponds to gallery[] items (indices 1+)
     galleryDetails = galleryImages.map((src, index) => {
+      // Try to match with detailSections by image URL
+      const detailSection = detailSectionMap.get(src)
+      // Fall back to localPlant.galleryDetails if no detailSection match
       const localCaption = localPlant?.galleryDetails?.[index]
+      
       return {
         src,
-        alt: localCaption?.alt || `${p.title} photo ${index + 1}`,
-        title: localCaption?.title,
-        description: localCaption?.description,
+        alt: detailSection?.alt || localCaption?.alt || `${p.title} photo ${index + 1}`,
+        title: detailSection?.title || localCaption?.title,
+        description: detailSection?.description || localCaption?.description,
       }
     })
   } else if (localPlant?.galleryImages) {

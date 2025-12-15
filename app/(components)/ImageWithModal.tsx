@@ -12,6 +12,7 @@ interface ImageWithModalProps {
   startIndex?: number;
   thumbnailSizes?: string;
   modalSizes?: string;
+  priority?: boolean;
 }
 
 export default function ImageWithModal({
@@ -22,6 +23,7 @@ export default function ImageWithModal({
   startIndex,
   thumbnailSizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
   modalSizes = "100vw",
+  priority = false,
 }: ImageWithModalProps) {
   const [open, setOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);
@@ -196,6 +198,7 @@ export default function ImageWithModal({
           className="object-cover"
           loader={sanityImageLoader}
           sizes={thumbnailSizes}
+          priority={priority}
         />
       </button>
 

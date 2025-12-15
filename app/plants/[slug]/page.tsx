@@ -79,6 +79,7 @@ export default async function PlantPage({ params }: PlantPageProps) {
           startIndex={0}
           thumbnailSizes="(max-width: 768px) 100vw, 50vw"
           modalSizes="100vw"
+          priority={true}
         />
       </section>
 
