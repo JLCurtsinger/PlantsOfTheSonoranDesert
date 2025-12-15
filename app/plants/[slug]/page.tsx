@@ -107,7 +107,7 @@ export default async function PlantPage({ params }: PlantPageProps) {
               const imageIndex = allImages.findIndex(img => img === item.src);
               return (
               <article
-                key={item.src}
+                key={(item as any)._key ?? (item as any).key ?? `${item.src}-${index}`}
                 className="flex flex-col rounded-lg bg-card border border-border-subtle shadow-sm overflow-hidden"
               >
                 <div className="relative w-full h-48 sm:h-56 md:h-64">
