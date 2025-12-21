@@ -6,6 +6,7 @@ import Link from "next/link";
 import { PlantCategory, type Plant } from "@/lib/plants";
 import PlantCard from "./PlantCard";
 import EvolutionPillars from "./EvolutionPillars";
+import BiodiversitySection from "./BiodiversitySection";
 
 interface HomeClientProps {
   plants: Plant[];
@@ -166,6 +167,9 @@ export default function HomeClient({ plants }: HomeClientProps) {
 
         {/* Section 4: Evolution Pillars */}
         <EvolutionPillars />
+
+        {/* Section 5: Biodiversity + Subregions */}
+        <BiodiversitySection />
       </div>
     </main>
   );
