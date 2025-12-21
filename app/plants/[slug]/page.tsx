@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { getPlantBySlug } from "@/lib/data/getPlants";
+import { getPlantBySlug, getAllPlants } from "@/lib/data/getPlants";
 import ImageWithModal from "@/app/(components)/ImageWithModal";
 import PlantDetailsSection from "@/app/(components)/PlantDetailsSection";
+import PlantPrevNextNav from "@/app/(components)/PlantPrevNextNav";
+import PlantSwipeNav from "@/app/(components)/PlantSwipeNav";
 
 // Force dynamic rendering to prevent static caching
 export const dynamic = 'force-dynamic'
@@ -19,6 +21,13 @@ export default async function PlantPage({ params }: PlantPageProps) {
   if (!plant) {
     notFound();
   }
+
+  // Compute prev/next slugs for navigation
+  const allPlants = await getAllPlants();
+  const currentIndex = allPlants.findIndex((p) => p.slug === slug);
+  const prevSlug = currentIndex > 0 ? allPlants[currentIndex - 1].slug : null;
+  const nextSlug =
+    currentIndex < allPlants.length - 1 ? allPlants[currentIndex + 1].slug : null;
 
   const allImages: string[] = [
     plant.mainImage,
@@ -38,8 +47,11 @@ export default async function PlantPage({ params }: PlantPageProps) {
     }));
 
   return (
-    <main className="max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-12 scroll-smooth">
-      <Link
+    <>
+      <PlantPrevNextNav currentSlug={slug} prevSlug={prevSlug} nextSlug={nextSlug} />
+      <PlantSwipeNav prevSlug={prevSlug} nextSlug={nextSlug} />
+      <main className="max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-12 scroll-smooth">
+        <Link
         href="/"
         className="inline-flex items-center text-sm text-text-secondary transition-colors duration-150 ease-out hover:underline hover:underline-offset-2 mb-6"
       >
@@ -153,6 +165,7 @@ export default async function PlantPage({ params }: PlantPageProps) {
 
       {/* Plant Details Section */}
       <PlantDetailsSection plant={plant} />
-    </main>
+      </main>
+    </>
   );
 }
