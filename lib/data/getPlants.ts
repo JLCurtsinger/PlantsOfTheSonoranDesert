@@ -4,6 +4,12 @@ import {toUiPlant} from '../sanity/adapter'
 import {plants as localPlants, type Plant} from '@/lib/plants'
 
 export async function getPlantBySlug(slug: string): Promise<Plant | null> {
+  // TEMPORARILY DISABLED: Desert Marigold is disabled pending correct imagery
+  // The current Desert Marigold page shows the wrong plant. Re-enable when correct images are available.
+  if (slug === 'desert-marigold') {
+    return null
+  }
+
   const client = getSanityClient()
   
   // Temporary dev diagnostics - remove after confirming fix
@@ -67,5 +73,9 @@ export async function getAllPlants(): Promise<Plant[]> {
   const sanitySlugs = new Set(sanityMapped.map(p => p.slug))
   const localsNotInSanity = localPlants.filter(p => !sanitySlugs.has(p.slug))
 
-  return [...sanityMapped, ...localsNotInSanity]
+  const allPlants = [...sanityMapped, ...localsNotInSanity]
+  
+  // TEMPORARILY DISABLED: Desert Marigold is disabled pending correct imagery
+  // The current Desert Marigold page shows the wrong plant. Re-enable when correct images are available.
+  return allPlants.filter(p => p.slug !== 'desert-marigold')
 }
