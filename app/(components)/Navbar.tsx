@@ -2,12 +2,23 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const plantsHref = pathname === "/" ? "#plants" : "/#plants";
   const toggleMobileNav = () => setIsOpen((prev) => !prev);
 
   const navLinkClass = "text-text-secondary transition-all duration-150 ease-out hover:underline hover:underline-offset-2 hover:[text-shadow:0_1px_2px_rgba(0,0,0,0.1)]";
+
+  const handlePlantsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      document.getElementById("plants")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      setIsOpen(false);
+    }
+  };
 
   return (
     <nav className="bg-card border-b border-border-subtle px-6 py-4">
@@ -24,7 +35,7 @@ export default function Navbar() {
           <Link href="/about" className={navLinkClass}>
             About
           </Link>
-          <Link href="/plants" className={navLinkClass}>
+          <Link href={plantsHref} className={navLinkClass} onClick={handlePlantsClick}>
             Plants
           </Link>
         </div>
@@ -72,7 +83,7 @@ export default function Navbar() {
               </Link>
             </li>
             <li>
-              <Link href="/plants" className={navLinkClass} onClick={() => setIsOpen(false)}>
+              <Link href={plantsHref} className={navLinkClass} onClick={(e) => { handlePlantsClick(e); setIsOpen(false); }}>
                 Plants
               </Link>
             </li>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PlantCategory, type Plant } from "@/lib/plants";
 import PlantCard from "./PlantCard";
+import EvolutionPillars from "./EvolutionPillars";
 
 interface HomeClientProps {
   plants: Plant[];
@@ -147,7 +148,7 @@ export default function HomeClient({ plants }: HomeClientProps) {
         </section>
 
         {/* Section 3: Plant Grid */}
-        <section className="py-12 pb-24" ref={gridRef}>
+        <section id="plants" className="py-12 pb-24" ref={gridRef}>
           {filteredPlants.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredPlants.map((plant) => (
@@ -162,6 +163,9 @@ export default function HomeClient({ plants }: HomeClientProps) {
             </div>
           )}
         </section>
+
+        {/* Section 4: Evolution Pillars */}
+        <EvolutionPillars />
       </div>
     </main>
   );
