@@ -15,7 +15,7 @@ type SanityPlant = {
   wildlifeValue?: string
   interestingFacts?: string[]
   sortOrder?: number
-  heroImage: any
+  heroImage?: any
   gallery?: Array<{
     _key?: string
     [key: string]: any
@@ -35,7 +35,8 @@ type SanityPlant = {
 // Optionally merges with local plant data for fields missing in Sanity
 export function toUiPlant(p: SanityPlant, localPlant?: Plant): Plant {
   // Build base URL without width/quality - the loader will handle responsive sizing
-  const mainImage = urlForImage(p.heroImage).url()
+  // Handle optional heroImage gracefully
+  const mainImage = p.heroImage ? urlForImage(p.heroImage).url() : (localPlant?.mainImage || '')
   
   // Build gallery deterministically from heroImage + gallery[]
   // Index 0 = heroImage, indices 1+ = gallery[] items

@@ -20,14 +20,18 @@ export default function PlantCard({ plant }: PlantCardProps) {
     <Link href={`/plants/${plant.slug}`}>
       <div className="bg-card rounded-lg overflow-hidden shadow-sm border border-border-subtle transition-all duration-150 ease-out hover:-translate-y-1 hover:shadow-md hover:border-white">
         <div className="relative w-full h-64">
-          <Image
-            src={plant.mainImage}
-            alt={plant.commonName}
-            fill
-            className="object-cover"
-            loader={sanityImageLoader}
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
+          {plant.mainImage ? (
+            <Image
+              src={plant.mainImage}
+              alt={plant.commonName}
+              fill
+              className="object-cover"
+              loader={sanityImageLoader}
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+          ) : (
+            <div className="w-full h-full bg-subtle" />
+          )}
         </div>
         <div className="p-4">
           <div className="flex items-start justify-between gap-2 mb-2">

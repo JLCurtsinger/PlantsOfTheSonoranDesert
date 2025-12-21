@@ -25,6 +25,9 @@ export default async function PlantPage({ params }: PlantPageProps) {
     ...(plant.galleryImages ?? []),
   ].filter(Boolean) as string[];
 
+  // Use first gallery image as hero if mainImage is missing
+  const heroImage = plant.mainImage || (plant.galleryImages && plant.galleryImages.length > 0 ? plant.galleryImages[0] : '');
+
   const galleryDetails =
     plant.galleryDetails ??
     (plant.galleryImages ?? []).map((src, index) => ({
@@ -71,16 +74,18 @@ export default async function PlantPage({ params }: PlantPageProps) {
         </div>
 
         {/* Right column: main image with modal */}
-        <ImageWithModal
-          src={plant.mainImage}
-          alt={plant.commonName}
-          wrapperClassName="relative w-full h-[320px] sm:h-[380px] md:h-[420px] rounded-lg bg-subtle"
-          allImages={[plant.mainImage, ...(plant.galleryImages ?? [])]}
-          startIndex={0}
-          thumbnailSizes="(max-width: 768px) 100vw, 50vw"
-          modalSizes="100vw"
-          priority={true}
-        />
+        {heroImage && (
+          <ImageWithModal
+            src={heroImage}
+            alt={plant.commonName}
+            wrapperClassName="relative w-full h-[320px] sm:h-[380px] md:h-[420px] rounded-lg bg-subtle"
+            allImages={allImages}
+            startIndex={0}
+            thumbnailSizes="(max-width: 768px) 100vw, 50vw"
+            modalSizes="100vw"
+            priority={true}
+          />
+        )}
       </section>
 
       {/* About this plant */}
@@ -125,18 +130,20 @@ export default async function PlantPage({ params }: PlantPageProps) {
                   />
                 </div>
 
-                <div className="px-3 py-3 flex flex-col gap-1">
-                  {item.title && (
-                    <h3 className="text-sm font-semibold text-text-primary">
-                      {item.title}
-                    </h3>
-                  )}
-                  {item.description && (
-                    <p className="text-xs text-text-secondary leading-snug">
-                      {item.description}
-                    </p>
-                  )}
-                </div>
+                {(item.title?.trim() || item.description?.trim()) && (
+                  <div className="px-3 py-3 flex flex-col gap-1">
+                    {item.title?.trim() && (
+                      <h3 className="text-sm font-semibold text-text-primary">
+                        {item.title}
+                      </h3>
+                    )}
+                    {item.description?.trim() && (
+                      <p className="text-xs text-text-secondary leading-snug">
+                        {item.description}
+                      </p>
+                    )}
+                  </div>
+                )}
               </article>
               );
             })}
