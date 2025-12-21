@@ -9,6 +9,7 @@ import { barrelCactus } from "./plant-data/barrel-cactus";
 import { desertMarigold } from "./plant-data/desert-marigold";
 import { creosoteBush } from "./plant-data/creosote-bush";
 import { cholla } from "./plant-data/cholla";
+import { hedgehogCactus } from "./plant-data/hedgehog-cactus";
 
 export const plants: Plant[] = [
   saguaroCactus,
@@ -19,6 +20,7 @@ export const plants: Plant[] = [
   desertMarigold,
   creosoteBush,
   cholla,
+  hedgehogCactus,
 ];
 
 export function getPlantBySlug(slug: string): Plant | undefined {

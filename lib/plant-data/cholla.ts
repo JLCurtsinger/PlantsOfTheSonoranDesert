@@ -10,9 +10,9 @@ export const cholla: Plant = {
   description:
     "Content coming soon.",
   quickFacts: [
-    { label: "Shape", value: "Cylindrical, jointed stem segments forming branching shrub- or tree-like structures." },
-    { label: "ID Feature", value: "Dense spines with papery, reflective sheaths; stem joints detach easily when disturbed." },
-    { label: "Habitat", value: "Open desert, grasslands, and rocky slopes; thrives in full sun and well-drained soils." },
+    { label: "Shape", value: "Cylindrical, jointed stem segments." },
+    { label: "ID Feature", value: "Dense spines with sheaths; stem joints detach easily." },
+    { label: "Habitat", value: "Open desert, grasslands, rocky slopes." },
   ],
   mainImage: "", // Hero image optional - will use first gallery image if available
   galleryImages: [], // TODO: Add Cholla species images to gallery
