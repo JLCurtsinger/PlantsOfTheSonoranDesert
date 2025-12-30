@@ -94,7 +94,6 @@ export default async function PlantPage({ params }: PlantPageProps) {
             allImages={allImages}
             startIndex={0}
             thumbnailSizes="(max-width: 768px) 100vw, 50vw"
-            modalSizes="100vw"
             priority={true}
           />
         )}
@@ -138,7 +137,6 @@ export default async function PlantPage({ params }: PlantPageProps) {
                     allImages={allImages}
                     startIndex={imageIndex >= 0 ? imageIndex : 0}
                     thumbnailSizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    modalSizes="100vw"
                   />
                 </div>
 

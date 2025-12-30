@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useLayoutEffect, useState, useRef, useMemo, useCallback } from "react";
 import Image from "next/image";
 import { sanityImageLoader } from "@/lib/sanity/image";
 
@@ -15,6 +15,14 @@ interface ImageWithModalProps {
   priority?: boolean;
 }
 
+// Constrain modal image size to reasonable max (1920px) instead of unbounded 100vw
+// This prevents requesting huge images on large desktop screens
+const MODAL_MAX_WIDTH = 1920;
+const MODAL_SIZES = `(max-width: 1920px) 90vw, ${MODAL_MAX_WIDTH}px`;
+
+// Dev-only instrumentation for debugging image loading performance
+const isDev = process.env.NODE_ENV === 'development';
+
 export default function ImageWithModal({
   src,
   alt,
@@ -22,7 +30,7 @@ export default function ImageWithModal({
   allImages,
   startIndex,
   thumbnailSizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
-  modalSizes = "100vw",
+  modalSizes = MODAL_SIZES,
   priority = false,
 }: ImageWithModalProps) {
   const [open, setOpen] = useState(false);
@@ -33,8 +41,70 @@ export default function ImageWithModal({
   const dragXRef = useRef(0);
   const rafIdRef = useRef<number | null>(null);
   const isAnimatingRef = useRef(false);
+  const preloadedImagesRef = useRef<Set<string>>(new Set());
+  const imageLoadStartRef = useRef<{ [key: string]: number }>({});
+  const modalContainerRef = useRef<HTMLDivElement>(null);
+  const [isImageLoading, setIsImageLoading] = useState(false);
 
-  const images = allImages && allImages.length > 0 ? allImages : [src];
+  // Memoize images array to avoid recomputation
+  const images = useMemo(() => {
+    return allImages && allImages.length > 0 ? allImages : [src];
+  }, [allImages, src]);
+
+  // Memoize active source to avoid recomputation
+  const activeSrc = useMemo(() => images[currentIndex], [images, currentIndex]);
+  
+  // Memoize navigation state
+  const hasPrev = useMemo(() => images.length > 1 && currentIndex > 0, [images.length, currentIndex]);
+  const hasNext = useMemo(() => images.length > 1 && currentIndex < images.length - 1, [images.length, currentIndex]);
+
+  // Preload an image URL by creating an Image object
+  // This triggers browser caching without rendering
+  const preloadImage = useCallback((imageSrc: string) => {
+    if (preloadedImagesRef.current.has(imageSrc)) {
+      return; // Already preloaded
+    }
+    
+    if (isDev) {
+      console.log('[ImageWithModal] Preloading image:', imageSrc.substring(0, 100) + '...');
+    }
+    
+    // Generate the URL that Next.js Image would request (approximate max width for modal)
+    const preloadUrl = sanityImageLoader({ src: imageSrc, width: MODAL_MAX_WIDTH });
+    
+    const img = new window.Image();
+    img.src = preloadUrl;
+    preloadedImagesRef.current.add(imageSrc);
+    
+    if (isDev) {
+      img.onload = () => {
+        console.log('[ImageWithModal] Preload complete:', imageSrc.substring(0, 100) + '...');
+      };
+      img.onerror = () => {
+        console.warn('[ImageWithModal] Preload failed:', imageSrc.substring(0, 100) + '...');
+      };
+    }
+  }, []);
+
+  // Preload prev/next images when modal opens or index changes
+  useEffect(() => {
+    if (!open) return;
+    
+    // Preload current image
+    if (activeSrc) {
+      preloadImage(activeSrc);
+    }
+    
+    // Preload next image
+    if (hasNext && currentIndex + 1 < images.length) {
+      preloadImage(images[currentIndex + 1]);
+    }
+    
+    // Preload previous image
+    if (hasPrev && currentIndex - 1 >= 0) {
+      preloadImage(images[currentIndex - 1]);
+    }
+  }, [open, currentIndex, activeSrc, hasNext, hasPrev, images, preloadImage]);
 
   const handleOpen = () => {
     if (allImages && typeof startIndex === "number") {
@@ -45,23 +115,54 @@ export default function ImageWithModal({
     }
     setZoomed(false);
     setOpen(true);
+    setIsImageLoading(true);
+    
+    if (isDev) {
+      console.log('[ImageWithModal] Modal opened, index:', startIndex ?? 0);
+    }
   };
 
-  const hasPrev = images.length > 1 && currentIndex > 0;
-  const hasNext = images.length > 1 && currentIndex < images.length - 1;
-  const activeSrc = images[currentIndex];
-
-  const goPrev = () => {
+  const goPrev = useCallback((e?: React.MouseEvent) => {
     if (!hasPrev) return;
-    setCurrentIndex((index) => Math.max(0, index - 1));
+    if (e) {
+      e.stopPropagation();
+    }
+    
+    if (isDev) {
+      console.log('[ImageWithModal] Navigating to previous image');
+    }
+    
+    setIsImageLoading(true);
+    setCurrentIndex((index) => {
+      const newIndex = Math.max(0, index - 1);
+      if (isDev) {
+        console.log('[ImageWithModal] Previous index:', newIndex);
+      }
+      return newIndex;
+    });
     setZoomed(false);
-  };
+  }, [hasPrev]);
 
-  const goNext = () => {
+  const goNext = useCallback((e?: React.MouseEvent) => {
     if (!hasNext) return;
-    setCurrentIndex((index) => Math.min(images.length - 1, index + 1));
+    if (e) {
+      e.stopPropagation();
+    }
+    
+    if (isDev) {
+      console.log('[ImageWithModal] Navigating to next image');
+    }
+    
+    setIsImageLoading(true);
+    setCurrentIndex((index) => {
+      const newIndex = Math.min(images.length - 1, index + 1);
+      if (isDev) {
+        console.log('[ImageWithModal] Next index:', newIndex);
+      }
+      return newIndex;
+    });
     setZoomed(false);
-  };
+  }, [hasNext, images.length]);
 
   // Mobile-only slide animation helpers
   const updateTrackTransform = (x: number, withTransition = false) => {
@@ -157,6 +258,17 @@ export default function ImageWithModal({
     };
   }, []);
 
+  // Set focus immediately when modal opens (before browser paint)
+  // This ensures the modal is fully active immediately, preventing the "first click activates" issue
+  useLayoutEffect(() => {
+    if (!open) return;
+    
+    // Set focus synchronously before browser paint to ensure modal is immediately active
+    if (modalContainerRef.current) {
+      modalContainerRef.current.focus();
+    }
+  }, [open]);
+
   // Escape + arrow keys + body scroll lock
   useEffect(() => {
     if (!open) return;
@@ -213,7 +325,9 @@ export default function ImageWithModal({
         >
           {/* This is the central box and the positioning context for arrows */}
           <div
-            className="relative inline-flex max-w-[90vw] max-h-[90vh] items-center justify-center"
+            ref={modalContainerRef}
+            tabIndex={-1}
+            className="relative inline-flex max-w-[90vw] max-h-[90vh] items-center justify-center outline-none"
             onClick={(event) => {
               event.stopPropagation();
             }}
@@ -221,7 +335,10 @@ export default function ImageWithModal({
             {/* Image container – give it an explicit height so Next.js Image with `fill` can render */}
             <div
               className="relative max-w-[90vw] max-h-[90vh] overflow-hidden rounded-lg shadow-xl cursor-zoom-in md:overflow-auto"
-              onClick={() => setZoomed((z) => !z)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setZoomed((z) => !z);
+              }}
               onTouchStart={(e) => {
                 // Only track on mobile (< md breakpoint)
                 if (window.matchMedia("(min-width: 768px)").matches) return;
@@ -321,16 +438,57 @@ export default function ImageWithModal({
                 style={{ willChange: "transform" }}
               >
                 <div className="relative flex items-center justify-center">
+                  {isImageLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 z-10">
+                      <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    </div>
+                  )}
                   <Image
+                    key={activeSrc}
                     src={activeSrc}
                     alt={alt}
-                    width={2000}
-                    height={2000}
+                    width={MODAL_MAX_WIDTH}
+                    height={MODAL_MAX_WIDTH}
                     className={`max-h-[85vh] max-w-[90vw] w-auto h-auto object-contain transition-transform duration-200 ${
                       zoomed ? "scale-150 cursor-zoom-out" : "scale-100 cursor-zoom-in"
                     }`}
                     loader={sanityImageLoader}
                     sizes={modalSizes}
+                    onLoadStart={() => {
+                      setIsImageLoading(true);
+                      if (isDev) {
+                        imageLoadStartRef.current[activeSrc] = performance.now();
+                        const url = sanityImageLoader({ src: activeSrc, width: MODAL_MAX_WIDTH });
+                        console.log('[ImageWithModal] Image load started:', {
+                          index: currentIndex,
+                          urlLength: url.length,
+                          urlPreview: url.substring(0, 150) + '...',
+                        });
+                      }
+                    }}
+                    onLoad={() => {
+                      setIsImageLoading(false);
+                      if (isDev) {
+                        const startTime = imageLoadStartRef.current[activeSrc];
+                        if (startTime) {
+                          const loadTime = performance.now() - startTime;
+                          console.log('[ImageWithModal] Image loaded:', {
+                            index: currentIndex,
+                            loadTime: `${loadTime.toFixed(0)}ms`,
+                          });
+                          delete imageLoadStartRef.current[activeSrc];
+                        }
+                      }
+                    }}
+                    onError={() => {
+                      setIsImageLoading(false);
+                      if (isDev) {
+                        console.error('[ImageWithModal] Image load error:', {
+                          index: currentIndex,
+                          src: activeSrc.substring(0, 100) + '...',
+                        });
+                      }
+                    }}
                   />
                 </div>
               </div>
@@ -340,11 +498,13 @@ export default function ImageWithModal({
             {hasPrev && (
               <button
                 type="button"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  goPrev();
+                aria-label="Previous image"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goPrev(e);
                 }}
-                className="hidden md:flex absolute left-[-3rem] top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-black/60 hover:bg-black/80 text-white text-2xl leading-none focus:outline-none"
+                className="hidden md:flex absolute left-[-3rem] top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-black/60 hover:bg-black/80 text-white text-2xl leading-none focus:outline-none focus:ring-2 focus:ring-white/50 transition-colors"
+                style={{ pointerEvents: 'auto' }}
               >
                 ‹
               </button>
@@ -353,11 +513,13 @@ export default function ImageWithModal({
             {hasNext && (
               <button
                 type="button"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  goNext();
+                aria-label="Next image"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goNext(e);
                 }}
-                className="hidden md:flex absolute right-[-3rem] top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-black/60 hover:bg-black/80 text-white text-2xl leading-none focus:outline-none"
+                className="hidden md:flex absolute right-[-3rem] top-1/2 -translate-y-1/2 h-10 w-10 items-center justify-center rounded-full bg-black/60 hover:bg-black/80 text-white text-2xl leading-none focus:outline-none focus:ring-2 focus:ring-white/50 transition-colors"
+                style={{ pointerEvents: 'auto' }}
               >
                 ›
               </button>
