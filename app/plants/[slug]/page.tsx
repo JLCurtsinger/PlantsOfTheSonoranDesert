@@ -1,3 +1,4 @@
+import React from "react";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +10,48 @@ import PlantSwipeNav from "@/app/(components)/PlantSwipeNav";
 
 // Force dynamic rendering to prevent static caching
 export const dynamic = 'force-dynamic'
+
+/**
+ * Parses markdown-style links [text](url) in description text and renders them as JSX links.
+ * Links open in a new tab.
+ */
+function parseDescriptionWithLinks(text: string): React.ReactNode {
+  if (!text) return text;
+  
+  const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match;
+  
+  while ((match = linkPattern.exec(text)) !== null) {
+    // Add text before the link
+    if (match.index > lastIndex) {
+      parts.push(text.substring(lastIndex, match.index));
+    }
+    
+    // Add the link
+    parts.push(
+      <a
+        key={match.index}
+        href={match[2]}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-text-primary hover:underline underline-offset-2"
+      >
+        {match[1]}
+      </a>
+    );
+    
+    lastIndex = linkPattern.lastIndex;
+  }
+  
+  // Add remaining text after the last link
+  if (lastIndex < text.length) {
+    parts.push(text.substring(lastIndex));
+  }
+  
+  return parts.length > 0 ? <>{parts}</> : text;
+}
 
 interface PlantPageProps {
   params: Promise<{ slug: string }>;
@@ -105,7 +148,7 @@ export default async function PlantPage({ params }: PlantPageProps) {
           About this plant
         </h2>
         <p className="text-base text-text-secondary leading-relaxed">
-          {plant.description}
+          {parseDescriptionWithLinks(plant.description)}
         </p>
         <a
           href="#plant-more-info"
