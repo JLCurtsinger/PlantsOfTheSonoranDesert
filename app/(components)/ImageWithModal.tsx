@@ -19,6 +19,8 @@ interface ImageWithModalProps {
 // This prevents requesting huge images on large desktop screens
 const MODAL_MAX_WIDTH = 1920;
 const MODAL_SIZES = `(max-width: 1920px) 90vw, ${MODAL_MAX_WIDTH}px`;
+// SSR-safe default width until client-side viewport is available
+const SSR_DEFAULT_WIDTH = 1200;
 
 // Dev-only instrumentation for debugging image loading performance
 const isDev = process.env.NODE_ENV === 'development';
@@ -45,6 +47,35 @@ export default function ImageWithModal({
   const imageLoadStartRef = useRef<{ [key: string]: number }>({});
   const modalContainerRef = useRef<HTMLDivElement>(null);
   const [isImageLoading, setIsImageLoading] = useState(false);
+  const loadTokenRef = useRef(0);
+  const expectedLoadTokenRef = useRef(0);
+  // Compute modal target width synchronously at initialization to avoid race conditions
+  const [modalTargetWidth, setModalTargetWidth] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const viewportWidth = window.innerWidth;
+      return Math.min(Math.floor(viewportWidth * 0.9), MODAL_MAX_WIDTH);
+    }
+    return SSR_DEFAULT_WIDTH;
+  });
+
+  // Update modal target width on resize only (debounced)
+  useEffect(() => {
+    let resizeTimeout: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        const viewportWidth = window.innerWidth;
+        const computedWidth = Math.min(Math.floor(viewportWidth * 0.9), MODAL_MAX_WIDTH);
+        setModalTargetWidth(computedWidth);
+      }, 150);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
+    };
+  }, []);
 
   // Memoize images array to avoid recomputation
   const images = useMemo(() => {
@@ -65,26 +96,13 @@ export default function ImageWithModal({
       return; // Already preloaded
     }
     
-    if (isDev) {
-      console.log('[ImageWithModal] Preloading image:', imageSrc.substring(0, 100) + '...');
-    }
-    
-    // Generate the URL that Next.js Image would request (approximate max width for modal)
-    const preloadUrl = sanityImageLoader({ src: imageSrc, width: MODAL_MAX_WIDTH });
+    // Generate the URL that Next.js Image would request (use modalTargetWidth to match modal request)
+    const preloadUrl = sanityImageLoader({ src: imageSrc, width: modalTargetWidth });
     
     const img = new window.Image();
     img.src = preloadUrl;
     preloadedImagesRef.current.add(imageSrc);
-    
-    if (isDev) {
-      img.onload = () => {
-        console.log('[ImageWithModal] Preload complete:', imageSrc.substring(0, 100) + '...');
-      };
-      img.onerror = () => {
-        console.warn('[ImageWithModal] Preload failed:', imageSrc.substring(0, 100) + '...');
-      };
-    }
-  }, []);
+  }, [modalTargetWidth]);
 
   // Preload prev/next images when modal opens or index changes
   useEffect(() => {
@@ -106,6 +124,24 @@ export default function ImageWithModal({
     }
   }, [open, currentIndex, activeSrc, hasNext, hasPrev, images, preloadImage]);
 
+  // Preload current image and adjacent images before opening modal
+  const preloadForModal = useCallback((targetIndex: number) => {
+    if (targetIndex >= 0 && targetIndex < images.length) {
+      // Preload target image
+      preloadImage(images[targetIndex]);
+      
+      // Preload next image
+      if (targetIndex + 1 < images.length) {
+        preloadImage(images[targetIndex + 1]);
+      }
+      
+      // Preload previous image
+      if (targetIndex - 1 >= 0) {
+        preloadImage(images[targetIndex - 1]);
+      }
+    }
+  }, [images, preloadImage]);
+
   const handleOpen = () => {
     if (allImages && typeof startIndex === "number") {
       const clampedIndex = Math.max(0, Math.min(startIndex, images.length - 1));
@@ -114,12 +150,10 @@ export default function ImageWithModal({
       setCurrentIndex(0);
     }
     setZoomed(false);
-    setOpen(true);
+    loadTokenRef.current += 1;
+    expectedLoadTokenRef.current = loadTokenRef.current;
     setIsImageLoading(true);
-    
-    if (isDev) {
-      console.log('[ImageWithModal] Modal opened, index:', startIndex ?? 0);
-    }
+    setOpen(true);
   };
 
   const goPrev = useCallback((e?: React.MouseEvent) => {
@@ -128,18 +162,10 @@ export default function ImageWithModal({
       e.stopPropagation();
     }
     
-    if (isDev) {
-      console.log('[ImageWithModal] Navigating to previous image');
-    }
-    
+    loadTokenRef.current += 1;
+    expectedLoadTokenRef.current = loadTokenRef.current;
     setIsImageLoading(true);
-    setCurrentIndex((index) => {
-      const newIndex = Math.max(0, index - 1);
-      if (isDev) {
-        console.log('[ImageWithModal] Previous index:', newIndex);
-      }
-      return newIndex;
-    });
+    setCurrentIndex((index) => Math.max(0, index - 1));
     setZoomed(false);
   }, [hasPrev]);
 
@@ -149,18 +175,10 @@ export default function ImageWithModal({
       e.stopPropagation();
     }
     
-    if (isDev) {
-      console.log('[ImageWithModal] Navigating to next image');
-    }
-    
+    loadTokenRef.current += 1;
+    expectedLoadTokenRef.current = loadTokenRef.current;
     setIsImageLoading(true);
-    setCurrentIndex((index) => {
-      const newIndex = Math.min(images.length - 1, index + 1);
-      if (isDev) {
-        console.log('[ImageWithModal] Next index:', newIndex);
-      }
-      return newIndex;
-    });
+    setCurrentIndex((index) => Math.min(images.length - 1, index + 1));
     setZoomed(false);
   }, [hasNext, images.length]);
 
@@ -301,6 +319,18 @@ export default function ImageWithModal({
       <button
         type="button"
         onClick={handleOpen}
+        onMouseEnter={() => {
+          const targetIndex = typeof startIndex === "number" ? startIndex : 0;
+          preloadForModal(targetIndex);
+        }}
+        onFocus={() => {
+          const targetIndex = typeof startIndex === "number" ? startIndex : 0;
+          preloadForModal(targetIndex);
+        }}
+        onTouchStart={() => {
+          const targetIndex = typeof startIndex === "number" ? startIndex : 0;
+          preloadForModal(targetIndex);
+        }}
         className={`relative block overflow-hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-text-primary transition-opacity duration-150 ease-out hover:opacity-90 ${wrapperClassName}`}
       >
         <Image
@@ -318,7 +348,7 @@ export default function ImageWithModal({
       {open && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
-          onClick={() => {
+          onClick={(e) => {
             setOpen(false);
             setZoomed(false);
           }}
@@ -438,55 +468,24 @@ export default function ImageWithModal({
                 style={{ willChange: "transform" }}
               >
                 <div className="relative flex items-center justify-center">
-                  {isImageLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 z-10">
-                      <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    </div>
-                  )}
                   <Image
-                    key={activeSrc}
                     src={activeSrc}
                     alt={alt}
-                    width={MODAL_MAX_WIDTH}
-                    height={MODAL_MAX_WIDTH}
+                    width={modalTargetWidth}
+                    height={modalTargetWidth}
                     className={`max-h-[85vh] max-w-[90vw] w-auto h-auto object-contain transition-transform duration-200 ${
                       zoomed ? "scale-150 cursor-zoom-out" : "scale-100 cursor-zoom-in"
                     }`}
                     loader={sanityImageLoader}
                     sizes={modalSizes}
-                    onLoadStart={() => {
-                      setIsImageLoading(true);
-                      if (isDev) {
-                        imageLoadStartRef.current[activeSrc] = performance.now();
-                        const url = sanityImageLoader({ src: activeSrc, width: MODAL_MAX_WIDTH });
-                        console.log('[ImageWithModal] Image load started:', {
-                          index: currentIndex,
-                          urlLength: url.length,
-                          urlPreview: url.substring(0, 150) + '...',
-                        });
-                      }
-                    }}
-                    onLoad={() => {
-                      setIsImageLoading(false);
-                      if (isDev) {
-                        const startTime = imageLoadStartRef.current[activeSrc];
-                        if (startTime) {
-                          const loadTime = performance.now() - startTime;
-                          console.log('[ImageWithModal] Image loaded:', {
-                            index: currentIndex,
-                            loadTime: `${loadTime.toFixed(0)}ms`,
-                          });
-                          delete imageLoadStartRef.current[activeSrc];
-                        }
+                    onLoadingComplete={() => {
+                      if (loadTokenRef.current === expectedLoadTokenRef.current) {
+                        setIsImageLoading(false);
                       }
                     }}
                     onError={() => {
-                      setIsImageLoading(false);
-                      if (isDev) {
-                        console.error('[ImageWithModal] Image load error:', {
-                          index: currentIndex,
-                          src: activeSrc.substring(0, 100) + '...',
-                        });
+                      if (loadTokenRef.current === expectedLoadTokenRef.current) {
+                        setIsImageLoading(false);
                       }
                     }}
                   />

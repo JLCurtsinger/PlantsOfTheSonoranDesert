@@ -74,7 +74,7 @@ export default async function PlantPage({ params }: PlantPageProps) {
 
   const allImages: string[] = [
     plant.mainImage,
-    ...(plant.galleryImages ?? []),
+    ...(plant.galleryImages ?? []).filter((img) => img && img !== plant.mainImage),
   ].filter(Boolean) as string[];
 
   // Use first gallery image as hero if mainImage is missing
